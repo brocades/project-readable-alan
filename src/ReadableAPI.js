@@ -16,21 +16,21 @@ export const getCategories = () =>
     .then(data => data.categories)
 
 export const getCategoryPosts = (category) =>
-  fetch(`${api}/category/posts`, { headers })
+  fetch(`${api}/${category.name}/posts`, { headers })
     .then(res => res.json())
-    .then(data => data.posts)
+    .then(data => data)
 
 export const getAllPosts = () =>
   fetch(`${api}/posts`, { headers })
     .then(res => res.json())
-    .then(data => data.posts)
+    .then(data => data)
 
 export const getPost = (post) =>
   fetch(`${api}/posts/${post.id}`, { headers })
     .then(res => res.json())
-    .then(data => data.post)
+    .then(data => data)
 
-export const sendPost = (post) =>
+export const uploadPost = (post) =>
   fetch(`${api}/posts`, {
     method: 'POST',
     headers: {
@@ -69,12 +69,12 @@ export const deletePost = (post) =>
       }
     }).then(res => res.json())
 
-export const getPostComments = (post) =>
-  fetch(`${api}/posts/${post.id}/comments`, { headers })
+export const getPostComments = (id) =>
+  fetch(`${api}/posts/${id}/comments`, { headers })
     .then(res => res.json())
-    .then(data => data.comments)
+    .then(data => data)
 
-export const sendComment = (comment) =>
+export const uploadComment = (comment) =>
   fetch(`${api}/comments`, {
     method: 'POST',
     headers: {
@@ -87,7 +87,7 @@ export const sendComment = (comment) =>
 export const getComment = (comment) =>
   fetch(`${api}/comments/${comment.id}`, { headers })
     .then(res => res.json())
-    .then(data => data.comment)
+    .then(data => data)
 
 export const voteComment = (comment, option) =>
   fetch(`${api}/comments/${comment.id}`, {

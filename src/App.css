@@ -1,28 +1,86 @@
 .App {
   text-align: center;
-}
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
-
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
-}
-
-.App-title {
-  font-size: 1.5em;
+  width: 100%;
+  height: 90%;
 }
 
 .App-intro {
-  font-size: large;
+  font-size: normal;
 }
 
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+/* Header section */
+
+header {
+  text-align: center;
+  height: 60px;
+}
+
+header h1 {
+  font-weight: normal;
+}
+
+h2 {
+  font-weight: normal;
+
+}
+
+
+
+/* Categories section */
+
+.categories-section {
+  border: 0;
+  border-right: 1px solid #ccc;
+  float: left;
+  width: 10%;
+}
+
+.categories-section ul {
+  padding-left: 0;
+}
+
+.category-title {
+
+}
+
+.categories-section h2 {
+  font-weight: normal;
+}
+
+/* Posts section */
+
+.app-post-header {
+  width: 100%;
+  float: left;
+  border: 0;
+  text-align: left;
+  margin-left: 38px;
+}
+
+.content-wrapper {
+  display: flex;
+}
+
+.posts-title {
+  display: inline-block;
+}
+
+.posts-title h2 {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.order-by {
+  display: inline-block;
+  margin-left: 200px;
+}
+
+.posts-section {
+  float: left;
+}
+
+/* Footer section */

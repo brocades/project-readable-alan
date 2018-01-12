@@ -1,0 +1,90 @@
+.post {
+	display: flex;
+	text-align: left;
+	min-height: 100px;
+	margin: 2px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	box-shadow: 1px 1px 0px #ccc;
+}
+
+/* Vote Score section */
+
+.vote-score-section {
+	border: 0;
+  border-right: 1px solid #ccc;
+	text-align: center;
+	font-size: 30px;
+	float: left;
+	width: 30px;
+	padding: 4px;
+
+}
+
+/* Post section */
+
+.post-wrapper {
+	display: flex;
+	width: 100%;
+
+}
+
+h3 {
+	font-weight: normal;
+	padding: 5px;
+	margin: 2px;
+	float: left;
+}
+
+.edit-button {
+	float: right;
+	font-size: 20px;
+}
+
+.delete-button {
+	float: right;
+	font-size: 20px;
+}
+
+.cancel-button {
+	float: right;
+	font-size: 20px;
+}
+
+.post-section {
+	float: left;
+	width: 100%;
+}
+
+.post-header {
+	width: 100%;
+  float: left;
+	border: 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.post-author-input {
+
+}
+
+.post-title {
+	width: 100%;
+	height: 36px;
+  float: left;
+	border: 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.post-title-input {
+	float: left;
+}
+
+.post-body {
+	display: flex;
+	padding: 5px;
+  margin: 2px;
+}
+
+.post-body-input {
+	width: 100%;
+}

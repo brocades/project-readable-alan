@@ -30,7 +30,7 @@ export const getPost = (post) =>
     .then(res => res.json())
     .then(data => data)
 
-export const sendPost = (post) =>
+export const uploadPost = (post) =>
   fetch(`${api}/posts`, {
     method: 'POST',
     headers: {
@@ -69,12 +69,12 @@ export const deletePost = (post) =>
       }
     }).then(res => res.json())
 
-export const getPostComments = (post) =>
-  fetch(`${api}/posts/${post.id}/comments`, { headers })
+export const getPostComments = (id) =>
+  fetch(`${api}/posts/${id}/comments`, { headers })
     .then(res => res.json())
     .then(data => data)
 
-export const sendComment = (comment) =>
+export const uploadComment = (comment) =>
   fetch(`${api}/comments`, {
     method: 'POST',
     headers: {

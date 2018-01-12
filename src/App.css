@@ -54,12 +54,16 @@ h2 {
 
 /* Posts section */
 
-hr {
-    display: block;
-    border: 0;
-    border-top: 1px solid #ccc;
-    margin-top: 0;
-    margin-bottom: 0;
+.app-post-header {
+  width: 100%;
+  float: left;
+  border: 0;
+  text-align: left;
+  margin-left: 38px;
+}
+
+.content-wrapper {
+  display: flex;
 }
 
 .posts-title {

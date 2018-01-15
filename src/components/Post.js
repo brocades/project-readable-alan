@@ -15,7 +15,7 @@ class Post extends Component {
 		editting: false,
 	}
 
-	handleSubmit = (e) => {
+	handlePostUpload = (e) => {
 		e.preventDefault()
 		const defaultValues = {
 			id: uuidv1(),
@@ -26,11 +26,27 @@ class Post extends Component {
 			...defaultValues,
 			...inputValues
 		}
+		//TODO dispatch post list update action
 		ReadableAPI.uploadPost(post)
 			.catch((reason) => {
 				console.log(`>>> Post not uploaded due to: ${reason}`)
 			})
 	}
+
+	handlePostEdit = (e) => {
+		e.preventDefault()
+		const inputValues = serializeForm(e.target, { hash: true })
+		console.log(`>>> Original post author: ${this.props.post.author}`)
+		let post = Object.assign({}, this.props.post, inputValues)
+		console.log(`>>> Editted post author: ${post.author}`)
+		//TODO dispatch post edit action
+		this.toggleEditting()
+		ReadableAPI.updatePost(post)
+			.catch((reason) => {
+				console.log(`>>> Post not updated due to: ${reason}`)
+			})
+	}
+
 	isEditting() {
 		return this.state.editting
 	}
@@ -128,7 +144,7 @@ class Post extends Component {
 								</section>
 							</Then>
 							<Else>
-								<form >
+								<form onSubmit={this.handlePostEdit}>
 									<section className="post-wrapper">
 										<section className="vote-score-section">
 											<FaAngleUp/>
@@ -137,15 +153,22 @@ class Post extends Component {
 										</section>
 										<section className="post-section">
 											<section className="post-header">
-												<input className="post-title-input" type="text" defaultValue={title} placeholder="React is awesome!"/>
+												<input className="post-title-input" type="text" name="title" defaultValue={title} placeholder="React is awesome!"/>
 												<h3>by</h3>
-												<input className="post-author-input" type="text" defaultValue={author} placeholder="ex.: Alan Brochier"/>
+												<input className="post-author-input" type="text" name="author" defaultValue={author} placeholder="ex.: Alan Brochier"/>
+												<select name="category">
+													{categories.map((category, index) => (
+															<option
+																key={index}
+																value={category.name}>{category.name}</option>
+														))}
+												</select>
 												<div className="cancel-button" onClick={() => this.toggleEditting()}>
 													<FaBan/>
 												</div>
 											</section>
 											<section className="post-body">
-												<textarea className="post-body-input" defaultValue={body} placeholder="Write your commentary here...">
+												<textarea className="post-body-input" name="body" defaultValue={body} placeholder="Write your commentary here...">
 												</textarea>
 												<input type="submit" value="Send"/>
 											</section>
@@ -169,21 +192,37 @@ class Post extends Component {
 					</section>
 				</Then>
 				<Else>
-					<form onSubmit={this.handleSubmit}>
+					<form onSubmit={this.handlePostUpload}>
 						<section className="post-wrapper">
 							<section className="post-section">
 								<section className="post-header">
-									<input className="post-title-input" type="text" name="title" defaultValue={title} placeholder="React is awesome!"/>
+									<input
+										className="post-title-input"
+										type="text"
+										name="title"
+										defaultValue={title}
+										placeholder="React is awesome!"/>
 									<h3>by</h3>
-									<input className="post-author-input" type="text" name="author" defaultValue={author} placeholder="ex.: Alan Brochier"/>
+									<input
+										className="post-author-input"
+										type="text"
+										name="author"
+										defaultValue={author}
+										placeholder="ex.: Alan Brochier"/>
 									<select name="category">
 										{categories.map((category, index) => (
-												<option key={index} value={category.name}>{category.name}</option>
+												<option
+													key={index}
+													value={category.name}>{category.name}</option>
 											))}
 									</select>
 								</section>
 								<section className="post-body">
-									<textarea className="post-body-input" name="body" defaultValue={body} placeholder="Write your commentary here...">
+									<textarea
+										className="post-body-input"
+										name="body"
+										defaultValue={body}
+										placeholder="Write your commentary here...">
 									</textarea>
 									<input type="submit" value="Send"/>
 								</section>

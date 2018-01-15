@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { If, Then, Else } from 'react-if'
+import { Link } from 'react-router-dom'
 import '../App.css';
 import Post from './Post'
 import * as ReadableAPI from '../ReadableAPI'
@@ -16,11 +18,33 @@ class App extends Component {
     })
   }
 
-  getCategoryPosts = (category) => {
-    ReadableAPI.getCategoryPosts(category).then((posts) => {
-      console.log(posts)
-    })
+  controlSelectedColor = (selectedCategory) => {
+    for (let category of this.state.categories) {
+      const categoryElement = document.getElementById(category.name)
+        categoryElement.classList.remove("selected-color")
+      if (selectedCategory === category.name) {
+        categoryElement.classList.add("selected-color")
+      }
+    }
   }
+
+  selectCategoryPosts = (categoryName) => {
+    this.controlSelectedColor(categoryName)
+    this.getCategoryPosts(categoryName)
+  }
+
+  getCategoryPosts = (categoryName) => {
+    if (categoryName !== "all") {
+      ReadableAPI.getCategoryPosts(categoryName).then((posts) => {
+        this.setState({ posts })
+      })
+    } else {
+      ReadableAPI.getAllPosts().then((posts) => {
+        this.setState({ posts })
+      })
+    }
+  }
+
   getAllPosts = () => {
     ReadableAPI.getAllPosts().then((posts) => {
       this.setState({ posts })
@@ -29,13 +53,11 @@ class App extends Component {
   }
   getPostComments = (post) => {
     ReadableAPI.getPostComments(post).then((comments) => {
-      console.log(comments)
     })
   }
   getCategories = () => {
     ReadableAPI.getCategories().then((categories) => {
       this.setState({ categories })
-      console.log(categories)
     })
   }
   componentDidMount() {
@@ -55,10 +77,15 @@ class App extends Component {
 
         <section className="categories-section">
           <h2 className="category-title">Categories</h2>
-
-            <h2>All</h2>
             {this.state.categories.map((category) => (
-                <h2 key={category.name}> {category.name} </h2>
+                <h2
+                  id={category.name}
+                  key={category.name}
+                  onClick={() => this.selectCategoryPosts(category.name)}>
+                  <Link to={`/${category.name}`}>
+                  {category.name}
+                  </Link>
+                  </h2>
               ))}
 
         </section>
@@ -69,10 +96,22 @@ class App extends Component {
             <h2 className="order-by">Order by </h2>
           </section>
           <section className="posts-content">
-            {this.state.posts.map((post) => (
-                <Post key={post.id} post={post}/>
-              ))}
+            <Post type="submit" categories={this.state.categories}/>
           </section>
+          <If condition={this.state.posts.length > 0}>
+            <Then>
+              <section className="posts-content">
+                {this.state.posts.map((post) => (
+                    <Post type="display" categories={this.state.categories} key={post.id} post={post}/>
+                  ))}
+              </section>
+            </Then>
+            <Else>
+              <section className="posts-content">
+                <p> This category has no posts </p>
+              </section>
+            </Else>
+          </If>
         </section>
 
         <footer></footer>

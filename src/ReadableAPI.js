@@ -16,7 +16,7 @@ export const getCategories = () =>
     .then(data => data.categories)
 
 export const getCategoryPosts = (category) =>
-  fetch(`${api}/${category.name}/posts`, { headers })
+  fetch(`${api}/${category}/posts`, { headers })
     .then(res => res.json())
     .then(data => data)
 
@@ -37,7 +37,7 @@ export const uploadPost = (post) =>
       ...headers,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ post })
+    body: JSON.stringify(post)
   }).then(res => res.json())
 
 export const votePost = (post, option) =>
@@ -47,7 +47,7 @@ export const votePost = (post, option) =>
       ...headers,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ option })
+    body: JSON.stringify( option )
   }).then(res => res.json())
 
 export const updatePost = (post) =>
@@ -57,7 +57,7 @@ export const updatePost = (post) =>
       ...headers,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ post })
+    body: JSON.stringify(post)
   }).then(res => res.json())
 
 export const deletePost = (post) =>
@@ -81,7 +81,7 @@ export const uploadComment = (comment) =>
       ...headers,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ comment })
+    body: JSON.stringify(comment)
   }).then(res => res.json())
 
 export const getComment = (comment) =>
@@ -96,7 +96,7 @@ export const voteComment = (comment, option) =>
       ...headers,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ option })
+    body: JSON.stringify(option)
   }).then(res => res.json())
 
 export const updateComment = (comment) =>
@@ -106,7 +106,7 @@ export const updateComment = (comment) =>
       ...headers,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ comment })
+    body: JSON.stringify(comment)
   }).then(res => res.json())
 
 export const deleteComment = (comment) =>

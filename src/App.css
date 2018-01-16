@@ -4,6 +4,12 @@
   height: 90%;
 }
 
+.app-content {
+  text-align: center;
+  width: 100%;
+  height: 90%;
+}
+
 .App-intro {
   font-size: normal;
 }

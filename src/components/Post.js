@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { If, Then, Else } from 'react-if'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { FaAngleUp, FaAngleDown, FaEdit, FaClose, FaBan } from 'react-icons/lib/fa'
 import '../post.css'
@@ -47,6 +48,30 @@ class Post extends Component {
 			})
 	}
 
+	deletePost = (id) => {
+		//TODO dispatch post deletion action
+		ReadableAPI.deletePost(id)
+			.catch((reason) => {
+				console.log(`>>> Post not deleted due to: ${reason}`)
+			})
+	}
+
+	upVotePost = (id) => {
+		//TODO dispatch action to update voteScore
+		ReadableAPI.votePost(id, "upVote")
+			.catch((reason) => {
+					console.log(`>>> Vote not registered: ${reason}`)
+				})
+	}
+
+	downVotePost = (id) => {
+		//TODO dispatch action to update voteScore
+		ReadableAPI.votePost(id, "downVote")
+			.catch((reason) => {
+					console.log(`>>> Vote not registered: ${reason}`)
+				})
+	}
+
 	isEditting() {
 		return this.state.editting
 	}
@@ -86,41 +111,43 @@ class Post extends Component {
 			title: null,
 			author: null,
 			body: null,
+			category: null,
 		}
 		if (this.props.post)
 			props = this.props.post
 		return props
 	}
+
 	componentDidMount() {
-		if (this.props.type === "display")
+		if (this.props.type === "display" || this.props.type === "details" )
 			this.getComments()
 	}
 
 	render() {
-		const { id, voteScore, title, author, body } = this.getPostProps()
+		const { id, voteScore, title, author, body, category, commentCount } = this.getPostProps()
 		const categories = this.getValidCategories()
 		const type = this.props.type
 		const { comments } = this.state
 		return (
-			<If condition={type !== "submit"}>
+			<If condition={type !== "submit" && type !== "details"}>
 				<Then>
 					<section id={id} className="post">
 						<If condition={this.isEditting() === false}>
 							<Then>
 								<section className="post-wrapper">
 									<section className="vote-score-section">
-										<FaAngleUp/>
+										<FaAngleUp onClick={() => this.upVotePost(id)}/>
 											<p>{voteScore}</p>
-										<FaAngleDown/>
+										<FaAngleDown onClick={() => this.downVotePost(id)}/>
 									</section>
 									<section className="post-section">
 										<section className="post-title">
-											<h3>{title} by {author}
+											<h3><Link to={`/${category}/${id}`}>{title}</Link> by {author} {commentCount} comments
 											</h3>
 											<div className="edit-button" onClick={() => this.toggleEditting()}>
 												<FaEdit/>
 											</div>
-											<div className="delete-button">
+											<div className="delete-button" onClick={() => this.deletePost(id)}>
 												<FaClose/>
 											</div>
 										</section>
@@ -132,7 +159,7 @@ class Post extends Component {
 											<Then>
 												<section className="comments-wrapper">
 													{comments.map((comment) => (
-															<Comment key={comment.id} comment={comment}/>
+															<Comment type="details" key={comment.id} comment={comment}/>
 														))}
 												</section>
 											</Then>
@@ -176,7 +203,7 @@ class Post extends Component {
 												<Then>
 													<section className="comments-wrapper">
 														{comments.map((comment) => (
-																<Comment key={comment.id} comment={comment}/>
+																<Comment type="details" key={comment.id} comment={comment}/>
 															))}
 													</section>
 												</Then>
@@ -192,43 +219,133 @@ class Post extends Component {
 					</section>
 				</Then>
 				<Else>
-					<form onSubmit={this.handlePostUpload}>
-						<section className="post-wrapper">
-							<section className="post-section">
-								<section className="post-header">
-									<input
-										className="post-title-input"
-										type="text"
-										name="title"
-										defaultValue={title}
-										placeholder="React is awesome!"/>
-									<h3>by</h3>
-									<input
-										className="post-author-input"
-										type="text"
-										name="author"
-										defaultValue={author}
-										placeholder="ex.: Alan Brochier"/>
-									<select name="category">
-										{categories.map((category, index) => (
-												<option
-													key={index}
-													value={category.name}>{category.name}</option>
-											))}
-									</select>
-								</section>
-								<section className="post-body">
-									<textarea
-										className="post-body-input"
-										name="body"
-										defaultValue={body}
-										placeholder="Write your commentary here...">
-									</textarea>
-									<input type="submit" value="Send"/>
-								</section>
+					<If condition={type === "details"}>
+						<Then>
+							<section id={id} className="post">
+								<If condition={this.isEditting() === false}>
+									<Then>
+										<section className="post-wrapper">
+											<section className="vote-score-section">
+												<FaAngleUp onClick={() => this.upVotePost(id)}/>
+													<p>{voteScore}</p>
+												<FaAngleDown onClick={() => this.downVotePost(id)}/>
+											</section>
+											<section className="post-section">
+												<section className="post-title">
+													<h3>{title} by {author}  {commentCount} comments
+													</h3>
+													<div className="edit-button" onClick={() => this.toggleEditting()}>
+														<FaEdit/>
+													</div>
+													<div className="delete-button" onClick={() => this.deletePost(id)}>
+														<FaClose/>
+													</div>
+												</section>
+												<section className="post-body">
+													<p>{body}</p>
+
+												</section>
+												<If condition={comments instanceof Array}>
+													<Then>
+														<section className="comments-wrapper">
+															{comments.map((comment) => (
+																	<Comment type="details" key={comment.id} comment={comment}/>
+																))}
+															<Comment type="submit"/>
+														</section>
+													</Then>
+													<Else>
+														<p>Be the first to comment!</p>
+													</Else>
+												</If>
+											</section>
+										</section>
+									</Then>
+									<Else>
+										<form onSubmit={this.handlePostEdit}>
+											<section className="post-wrapper">
+												<section className="vote-score-section">
+													<FaAngleUp/>
+														<p>{voteScore}</p>
+													<FaAngleDown/>
+												</section>
+												<section className="post-section">
+													<section className="post-header">
+														<input className="post-title-input" type="text" name="title" defaultValue={title} placeholder="React is awesome!"/>
+														<h3>by</h3>
+														<input className="post-author-input" type="text" name="author" defaultValue={author} placeholder="ex.: Alan Brochier"/>
+														<select name="category">
+															{categories.map((category, index) => (
+																	<option
+																		key={index}
+																		value={category.name}>{category.name}</option>
+																))}
+														</select>
+														<div className="cancel-button" onClick={() => this.toggleEditting()}>
+															<FaBan/>
+														</div>
+													</section>
+													<section className="post-body">
+														<textarea className="post-body-input" name="body" defaultValue={body} placeholder="Write your commentary here...">
+														</textarea>
+														<input type="submit" value="Send"/>
+													</section>
+													<If condition={comments instanceof Array}>
+														<Then>
+															<section className="comments-wrapper">
+																{comments.map((comment) => (
+																		<Comment key={comment.id} comment={comment}/>
+																	))}
+															</section>
+														</Then>
+														<Else>
+															<p>Be the first to comment!</p>
+														</Else>
+													</If>
+												</section>
+											</section>
+										</form>
+									</Else>
+								</If>
 							</section>
-						</section>
-					</form>
+						</Then>
+						<Else>
+							<form onSubmit={this.handlePostUpload}>
+								<section className="post-wrapper">
+									<section className="post-section">
+										<section className="post-header">
+											<input
+												className="post-title-input"
+												type="text"
+												name="title"
+												placeholder="React is awesome!"/>
+											<h3>by</h3>
+											<input
+												className="post-author-input"
+												type="text"
+												name="author"
+												placeholder="ex.: Alan Brochier"/>
+											<select name="category">
+												{categories.map((category, index) => (
+														<option
+															key={index}
+															value={category.name}>{category.name}</option>
+													))}
+											</select>
+										</section>
+										<section className="post-body">
+											<textarea
+												className="post-body-input"
+												name="body"
+												placeholder="Write your commentary here...">
+											</textarea>
+											<input type="submit" value="Send"/>
+										</section>
+									</section>
+								</section>
+							</form>
+						</Else>
+					</If>
 				</Else>
 			</If>
 		)

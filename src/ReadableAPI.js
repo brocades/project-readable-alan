@@ -25,8 +25,8 @@ export const getAllPosts = () =>
     .then(res => res.json())
     .then(data => data)
 
-export const getPost = (post) =>
-  fetch(`${api}/posts/${post.id}`, { headers })
+export const getPost = (id) =>
+  fetch(`${api}/posts/${id}`, { headers })
     .then(res => res.json())
     .then(data => data)
 
@@ -40,14 +40,14 @@ export const uploadPost = (post) =>
     body: JSON.stringify(post)
   }).then(res => res.json())
 
-export const votePost = (post, option) =>
-  fetch(`${api}/posts/${post.id}`, {
+export const votePost = (id, option) =>
+  fetch(`${api}/posts/${id}`, {
     method: 'POST',
     headers: {
       ...headers,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify( option )
+    body: JSON.stringify({ option })
   }).then(res => res.json())
 
 export const updatePost = (post) =>
@@ -60,8 +60,8 @@ export const updatePost = (post) =>
     body: JSON.stringify(post)
   }).then(res => res.json())
 
-export const deletePost = (post) =>
-  fetch(`${api}/posts/${post.id}`, {
+export const deletePost = (id) =>
+  fetch(`${api}/posts/${id}`, {
       method: 'DELETE',
       headers: {
         ...headers,

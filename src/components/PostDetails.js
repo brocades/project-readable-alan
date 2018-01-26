@@ -1,48 +1,19 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { If, Then, Else } from 'react-if'
 import { Link } from 'react-router-dom'
-import PropTypes from 'prop-types'
 import { FaAngleUp, FaAngleDown, FaEdit, FaClose, FaBan } from 'react-icons/lib/fa'
 import '../post.css'
 import Comment from './Comment'
 import * as ReadableAPI from '../ReadableAPI'
 import serializeForm from 'form-serialize'
-import { connect } from 'react-redux'
-import { sendPost, editPost, deletePost, votePost, deleteComment } from '../actions'
-const uuidv1 = require('uuid/v1');
+import PropTypes from 'prop-types'
+import { editPost, deletePost, votePost, deleteComment } from '../actions'
 
-class Post extends Component {
+class PostDetails extends Component {
 
 	state = {
 		editting: false,
-	}
-
-	handlePostUpload = (e) => {
-		e.preventDefault()
-		const defaultValues = {
-			id: uuidv1(),
-			timestamp: Date.now(),
-			commentCount: 0,
-			voteScore: 1,
-			deleted: false,
-		}
-		const inputValues = serializeForm(e.target, { hash: true })
-		const post = {
-			...defaultValues,
-			...inputValues
-		}
-		//TODO dispatch post list update action
-		this.props.uploadPost(post)
-		ReadableAPI.uploadPost(post)
-			.catch((reason) => {
-				console.log(`>>> Post not uploaded due to: ${reason}`)
-			})
-		this.resetInputform()
-	}
-
-	resetInputform = () => {
-		const postUploadForm = document.getElementById("postUploadForm")
-		postUploadForm.reset()
 	}
 
 	handlePostEdit = (e) => {
@@ -117,14 +88,9 @@ class Post extends Component {
 		return props
 	}
 
-	componentDidMount() {
-
-	}
-
 	render() {
 		const { id, voteScore, title, author, body, category, commentCount, comments } = this.getPostProps()
 		const categories = this.getValidCategories()
-		const type = this.props.type
 		return (
 			<section id={id} className="post">
 				<If condition={this.isEditting() === false}>
@@ -138,44 +104,43 @@ class Post extends Component {
 							<section className="post-section">
 								<section className="post-title">
 									<section className="post-title-texts">
-										<h3><Link
-													to={`/${category}/${id}`}>{title}
-													</Link> by {author} {commentCount} comments
+										<h3>{title} by {author}  {commentCount} comments
 										</h3>
 									</section>
 									<section className="post-title-buttons">
 										<div className="edit-button" onClick={() => this.toggleEditting()}>
 											<FaEdit/>
 										</div>
-										<div className="delete-button">
-											<FaClose/>
-										</div>
+										<Link onClick={() => this.deletePost(id)} to="/">
+											<div className="delete-button">
+												<FaClose/>
+											</div>
+										</Link>
 									</section>
 								</section>
 								<section className="post-body">
 									<p className="post-body-text">{body}</p>
 
 								</section>
-								<section id="commentsSection" className="collapse-comments">
-									<If condition={comments instanceof Array}>
-										<Then>
-											<section className="comments-wrapper">
-												{comments
-													.filter((comment) => !comment.deleted)
-													.map((comment) => (
+								<If condition={comments instanceof Array}>
+									<Then>
+										<section className="comments-wrapper">
+											{comments
+												.filter((comment) => !comment.deleted)
+												.map((comment) => (
 														<Comment
 															type="details"
 															parentId={id}
 															key={comment.id}
 															comment={comment}/>
 													))}
-											</section>
-										</Then>
-										<Else>
-											<p>Be the first to comment!</p>
-										</Else>
-									</If>
-								</section>
+											<Comment type="submit" parentId={id}/>
+										</section>
+									</Then>
+									<Else>
+										<p>Be the first to comment!</p>
+									</Else>
+								</If>
 							</section>
 						</section>
 					</Then>
@@ -203,26 +168,24 @@ class Post extends Component {
 										</textarea>
 										<input className="post-input-button" type="submit" value="Send"/>
 									</section>
-									<section id="commentsSection" className="collapse-comments">
-										<If condition={comments instanceof Array}>
-											<Then>
-												<section className="comments-wrapper">
-													{comments
-														.filter((comment) => !comment.deleted)
-														.map((comment) => (
-															<Comment
-																type="details"
-																parentId={id}
-																key={comment.id}
-																comment={comment}/>
-														))}
-												</section>
-											</Then>
-											<Else>
-												<p>Be the first to comment!</p>
-											</Else>
-										</If>
-									</section>
+									<If condition={comments instanceof Array}>
+										<Then>
+											<section className="comments-wrapper">
+												{comments
+													.filter((comment) => !comment.deleted)
+													.map((comment) => (
+														<Comment
+															key={comment.id}
+															type="details"
+															parentId={id}
+															comment={comment}/>
+													))}
+											</section>
+										</Then>
+										<Else>
+											<p>Be the first to comment!</p>
+										</Else>
+									</If>
 								</section>
 							</section>
 						</form>
@@ -233,6 +196,12 @@ class Post extends Component {
 	}
 }
 
+PostDetails.propTypes = {
+	title: PropTypes.string,
+	author: PropTypes.string,
+	body: PropTypes.string,
+}
+
 function mapStateToProps({ post }) {
 	return {
 		categories: post.categories
@@ -241,7 +210,6 @@ function mapStateToProps({ post }) {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		uploadPost: (data) => dispatch(sendPost(data)),
 		updatePost: (data) => dispatch(editPost(data)),
 		deletePost: (data) => dispatch(deletePost(data)),
 		votePost: (data) => dispatch(votePost(data)),
@@ -249,10 +217,4 @@ function mapDispatchToProps(dispatch) {
 	}
 }
 
-Post.propTypes = {
-	title: PropTypes.string,
-	author: PropTypes.string,
-	body: PropTypes.string,
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Post)
+export default connect(mapStateToProps, mapDispatchToProps)(PostDetails)

@@ -14,11 +14,6 @@
   font-size: normal;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
 /* Header section */
 
 header {
@@ -38,9 +33,9 @@ h2 {
 /* Categories section */
 
 .categories-section {
+  display: inline-block;
   border: 0;
   border-right: 1px solid #ccc;
-  float: left;
   width: 10%;
 }
 
@@ -88,7 +83,7 @@ h2 {
 }
 
 .posts-section {
-  float: left;
+  display: inline-block;
 }
 
 /* Footer section */

@@ -1,36 +1,17 @@
 import React, { Component } from 'react';
-import { If, Then, Else } from 'react-if'
 import { Route, Link, Redirect } from 'react-router-dom'
 import '../App.css';
 import Post from './Post'
+import CategoryPosts from './CategoryPosts'
+import PostDetails from './PostDetails'
+import PostSubmit from './PostSubmit'
 import * as ReadableAPI from '../ReadableAPI'
+import { connect } from 'react-redux'
 
 class App extends Component {
 
-  state = {
-    categories: [],
-    posts: [],
-  }
-
-  getPost = (id) => {
-    let selectedPost = {}
-    console.log(`>>> Provided ID: ${id}`)
-    ReadableAPI.getPost(id).then((post) => {
-      selectedPost = post
-    })
-    return selectedPost
-  }
-
-  getPostWithId = (id) => {
-    for (let post of this.state.posts) {
-      if (post.id === id) {
-        return post
-      }
-    }
-  }
-
   controlSelectedColor = (selectedCategory) => {
-    for (let category of this.state.categories) {
+    for (let category of this.props.categories) {
       const categoryElement = document.getElementById(category.name)
         categoryElement.classList.remove("selected-color")
       if (selectedCategory === category.name) {
@@ -41,7 +22,7 @@ class App extends Component {
 
   selectCategoryPosts = (categoryName) => {
     this.controlSelectedColor(categoryName)
-    this.getCategoryPosts(categoryName)
+    //this.getCategoryPosts(categoryName)
   }
 
   getCategoryPosts = (categoryName) => {
@@ -71,11 +52,16 @@ class App extends Component {
       this.setState({ categories })
     })
   }
+
+  getPostDetails = (id) => {
+    for (let post of this.props.posts)
+      if (post.id === id) return post
+  }
+
   componentDidMount() {
     //this.getCategoryPosts(this.state.category)
-    this.getCategories()
     //this.getPost(this.state.post)
-    this.getAllPosts()
+    //this.getAllPosts()
     //this.getPostComments(this.state.post)
   }
 
@@ -85,76 +71,69 @@ class App extends Component {
         <Route exact path="/" render={() => (
           <Redirect to="/all"/>
         )}/>
-        <Route exact path="/:category" render={() => (
-          <div className="app-content">
-            <header>
-              <h1 className="app-title">Posts App</h1>
-            </header>
 
-            <section className="categories-section">
-              <h2 className="category-title">Categories</h2>
-                {this.state.categories.map((category) => (
-                    <h2
-                      id={category.name}
-                      key={category.name}
-                      onClick={() => this.selectCategoryPosts(category.name)}>
-                      <Link to={`/${category.name}`}>
-                      {category.name}
-                      </Link>
-                      </h2>
-                  ))}
+        <header>
+          <h1 className="app-title">Readable App</h1>
+        </header>
 
-            </section>
-
+        <div className="app-content">
+          <section className="categories-section">
+            <h2 className="category-title">Categories</h2>
+              {this.props.categories.map((category) => (
+                  <h2
+                    id={category.name}
+                    key={category.name}>
+                    <Link to={`/${category.name}`}>
+                    {category.name}
+                    </Link>
+                  </h2>
+                ))}
+          </section>
+          <Route exact path="/:category" render={() => (
             <section className="posts-section">
               <section className="app-post-header">
                 <h2 className="posts-title">Posts</h2>
                 <h2 className="order-by">Order by </h2>
               </section>
               <section className="posts-content">
-                <Post type="submit" categories={this.state.categories}/>
-              </section>
-              <If condition={this.state.posts.length > 0}>
-                <Then>
-                  <section className="posts-content">
-                    {this.state.posts.map((post) => (
-                        <Post
-                          type="display"
-                          categories={this.state.categories}
-                          key={post.id}
-                          post={post}/>
-                      ))}
-                  </section>
-                </Then>
-                <Else>
-                  <section className="posts-content">
-                    <p> This category has no posts </p>
-                  </section>
-                </Else>
-              </If>
-            </section>
+                <PostSubmit />
 
-            <footer></footer>
-          </div>
-          )}/>
-        <Route exact path="/:category/:id" render={({ match }) => (
-          <div className="app-content">
-            <header>
-              <h1 className="app-title">Posts App</h1>
-            </header>
-            <section className="posts-section">
-              <Post
-                type="details"
-                categories={this.state.categories}
-                key={match.params.id}
-                post={this.getPostWithId(match.params.id)}/>
+              {this.props.categories.map((category) => (
+                <Route key={category.path} exact path={`/${category.path}`} render={() => (
+                  <CategoryPosts category={category.name}/>
+                  )}/>
+                ))}
+              </section>
             </section>
-            <footer></footer>
-          </div>
           )}/>
+
+          <Route exact path="/:category/:id" render={({ match }) => (
+            <section className="posts-section">
+              <PostDetails
+                key={match.params.id}
+                post={this.getPostDetails(match.params.id)}/>
+            </section>
+          )}/>
+        </div>
+        <footer></footer>
       </div>
     )
   }
 }
 
-export default App;
+function mapStateToProps({ post, comment }) {
+  const allComments = Object.keys(comment.comments).map(key => comment.comments[key])
+
+  return {
+    posts: Object.values(post.posts).reduce((postsArray, singlePost) => {
+      postsArray.push({
+        ...singlePost,
+        comments: allComments.filter(singleComment => singleComment.parentId === singlePost.id)
+      })
+      return postsArray
+    }, []),
+    categories: post.categories,
+  }
+}
+
+export default connect(mapStateToProps)(App);

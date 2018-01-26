@@ -9,12 +9,13 @@
 
 /* Vote Score section */
 
-.vote-score-section {
+.comment-vote-score-section {
+	display: inline-block;
+	vertical-align: top;
 	border: 0;
   border-right: 1px solid #ccc;
 	text-align: center;
 	font-size: 30px;
-	float: left;
 	width: 30px;
 	padding: 4px;
 }
@@ -34,46 +35,54 @@ h3 {
 }
 
 .edit-button {
-	float: right;
+	display: inline-block;
 	font-size: 20px;
 }
 
 .delete-button {
-	float: right;
+	display: inline-block;
 	font-size: 20px;
 }
 
 .cancel-button {
-	float: right;
+	display: inline-block;
 	font-size: 20px;
 }
 
 .comment-section {
-	float: left;
-	width: 100%;
+	display: inline-block;
 }
+
+.comment-vote-score {
+	font-size: 75%;
+}
+
 .comment-wrapper {
-	display: flex;
 }
 
 .comment-header {
-	width: 100%;
 	height: 36px;
-  float: left;
 	border: 0;
   border-bottom: 1px solid #ccc;
 }
 
 .comment-author-input {
-
+	display: inline-block;
 }
 
 .comment-body {
-	display: flex;
 	padding: 5px;
   margin: 2px;
 }
 
+.comment-body-text {
+
+}
+
 .comment-body-input {
-	width: 100%;
+	display: inline-block;
+}
+
+.comment-input-button {
+	display: inline-block;
 }

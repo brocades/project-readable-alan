@@ -2,9 +2,8 @@
 	text-align: left;
 	min-height: 100px;
 	margin: 2px;
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	box-shadow: 1px 1px 0px #ccc;
+	box-shadow: px 2px 4px rgba(0, 0, 0, 0.3);
+	background-color: white;
 }
 
 /* Vote Score section */
@@ -12,7 +11,7 @@
 .post-vote-score-section {
 	display: inline-block;
 	border: 0;
-  border-right: 1px solid #ccc;
+  border-right: 1px solid lightgrey;
   vertical-align: top;
 	text-align: center;
 	font-size: 30px;
@@ -57,7 +56,11 @@ h3 {
 
 .post-header {
 	border: 0;
-  border-bottom: 1px solid #ccc;
+}
+
+.post-form input {
+	border: none;
+  border-bottom: 1px solid #ddd;
 }
 
 .post-author-input {
@@ -72,7 +75,7 @@ h3 {
 	display: block;
 	height: 36px;
 	border: 0;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid lightgrey;
 }
 
 .post-title-texts {

@@ -180,7 +180,7 @@ class Post extends Component {
 						</section>
 					</Then>
 					<Else>
-						<form onSubmit={this.handlePostEdit}>
+						<form className="post-form" onSubmit={this.handlePostEdit}>
 							<section className="post-wrapper">
 								<section className="post-section">
 									<section className="post-header">

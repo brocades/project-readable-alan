@@ -11,18 +11,18 @@ import { connect } from 'react-redux'
 class App extends Component {
 
   controlSelectedColor = (selectedCategory) => {
-    for (let category of this.props.categories) {
-      const categoryElement = document.getElementById(category.name)
-        categoryElement.classList.remove("selected-color")
-      if (selectedCategory === category.name) {
-        categoryElement.classList.add("selected-color")
+    const categoryItems = document.getElementsByClassName("category-item")
+
+    for (let item of categoryItems) {
+        item.classList.remove("category-item-selected")
+      if (selectedCategory === item.id) {
+        item.classList.add("category-item-selected")
       }
     }
   }
 
-  selectCategoryPosts = (categoryName) => {
+  selectCategory = (categoryName) => {
     this.controlSelectedColor(categoryName)
-    //this.getCategoryPosts(categoryName)
   }
 
   getCategoryPosts = (categoryName) => {
@@ -78,22 +78,27 @@ class App extends Component {
 
         <div className="app-content">
           <section className="categories-section">
-            <h2 className="category-title">Categories</h2>
-              {this.props.categories.map((category) => (
-                  <h2
-                    id={category.name}
-                    key={category.name}>
-                    <Link to={`/${category.name}`}>
-                    {category.name}
-                    </Link>
-                  </h2>
-                ))}
+            <section className="categories-wrapper">
+              <h2 className="category-title">Categories</h2>
+                <section className="category-types">
+                  {this.props.categories.map((category) => (
+                      <Link to={`/${category.name}`}>
+                        <button
+                          className="category-item"
+                          id={category.name}
+                          key={category.name}
+                          onClick={() => this.selectCategory(category.name)}>
+                          {category.name}
+                        </button>
+                      </Link>
+                    ))}
+                </section>
+            </section>
           </section>
           <Route exact path="/:category" render={() => (
             <section className="posts-section">
               <section className="app-post-header">
-                <h2 className="posts-title">Posts</h2>
-                <h2 className="order-by">Order by </h2>
+                <h2 className="posts-title">Discussion</h2>
               </section>
               <section className="posts-content">
                 <PostSubmit />
@@ -106,6 +111,11 @@ class App extends Component {
               </section>
             </section>
           )}/>
+          <section className="actions-section">
+            <section className="actions-wrapper">
+              <h2> Actions </h2>
+            </section>
+          </section>
 
           <Route exact path="/:category/:id" render={({ match }) => (
             <section className="posts-section">

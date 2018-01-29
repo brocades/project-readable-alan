@@ -1,13 +1,17 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { sendPost } from '../actions'
-import '../post.css'
+import '../submitpost.css'
 import * as ReadableAPI from '../ReadableAPI'
 import serializeForm from 'form-serialize'
 import PropTypes from 'prop-types'
+import { sendPost, closeSubmitModal } from '../actions'
 const uuidv1 = require('uuid/v1');
 
 class PostSubmit extends Component {
+
+	state = {
+		selectedCategory: "react",
+	}
 
 	handlePostUpload = (e) => {
 		e.preventDefault()
@@ -17,6 +21,7 @@ class PostSubmit extends Component {
 			commentCount: 0,
 			voteScore: 1,
 			deleted: false,
+			category: this.state.selectedCategory,
 		}
 		const inputValues = serializeForm(e.target, { hash: true })
 		const post = {
@@ -29,8 +34,27 @@ class PostSubmit extends Component {
 			.catch((reason) => {
 				console.log(`>>> Post not uploaded due to: ${reason}`)
 			})
+		this.props.closeSubmitModal()
 		this.resetInputform()
 	}
+
+	controlSelectedColor = (selectedCategory) => {
+    const categoryButtons = document.getElementsByClassName("postsubmit-category-button")
+
+    for (let button of categoryButtons) {
+        button.classList.remove("category-button-selected")
+      if (selectedCategory === button.value) {
+        button.classList.add("category-button-selected")
+      }
+    }
+  }
+
+  selectCategory = (categoryName) => {
+  	this.setState({
+  		selectedCategory: categoryName,
+  	})
+    this.controlSelectedColor(categoryName)
+  }
 
 	resetInputform = () => {
 		const postUploadForm = document.getElementById("postUploadForm")
@@ -46,40 +70,59 @@ class PostSubmit extends Component {
 	render() {
 		const categories = this.getValidCategories()
 		return (
-			<form id="postUploadForm" onSubmit={this.handlePostUpload}>
-				<section className="post-wrapper">
-					<section className="post-section">
-						<section className="post-header">
-							<input
-								className="post-title-input"
-								type="text"
-								name="title"
-								placeholder="React is awesome!"/>
-							<h3>by</h3>
-							<input
-								className="post-author-input"
-								type="text"
-								name="author"
-								placeholder="ex.: Alan Brochier"/>
-							<select name="category">
-								{categories.map((category) => (
-										<option
+			<div className="postsubmit-modal">
+				<section className="postsubmit-wrapper">
+					<form id="postUploadForm" className="postsubmit-upload-form" onSubmit={this.handlePostUpload}>
+						<section className="postsubmit-section">
+							<section className="postsubmit-header">
+								<label>
+									Category
+								</label>
+								<div className="buttons-group">
+									{categories.map((category) => (
+										<button type="button" className="postsubmit-category-button"
 											key={category.path}
-											value={category.name}>{category.name}</option>
+											value={category.name}
+											onClick={() => this.selectCategory(category.name)}>
+											{category.name}
+										</button>
 									))}
-							</select>
+								</div>
+
+								<label>
+									Title
+								</label>
+								<input
+									className="postsubmit-title-input"
+									type="text"
+									name="title"/>
+
+								<label>
+									Author
+								</label>
+								<input
+									className="postsubmit-author-input"
+									type="text"
+									name="author"/>
+							</section>
+							<section className="postsubmit-body">
+								<label>
+									Content
+								</label>
+								<textarea
+									className="postsubmit-body-input"
+									name="body">
+								</textarea>
+								<button
+									type="submit"
+									value="Send"
+									className="postsubmit-input-button"
+									>Send</button>
+							</section>
 						</section>
-						<section className="post-body">
-							<textarea
-								className="post-body-input"
-								name="body"
-								placeholder="Write your commentary here...">
-							</textarea>
-							<input className="post-input-button" type="submit" value="Send"/>
-						</section>
-					</section>
+					</form>
 				</section>
-			</form>
+			</div>
 		)
 	}
 }
@@ -95,7 +138,8 @@ const mapStateToProps = ({ post }) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-	uploadPost: (data) => dispatch(sendPost(data))
+	uploadPost: (data) => dispatch(sendPost(data)),
+	closeSubmitModal: () => dispatch(closeSubmitModal()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostSubmit)

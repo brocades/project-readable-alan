@@ -4,6 +4,8 @@ export const DELETE_POST = 'DELETE_POST'
 export const VOTE_POST = 'VOTE_POST'
 export const UPDATE_COMMENT_COUNT = 'UPDATE_COMMENT_COUNT'
 export const INITIALIZE_CONTENT = 'INITIALIZE_CONTENT'
+export const OPEN_SUBMIT_MODAL = 'OPEN_SUBMIT_MODAL'
+export const CLOSE_SUBMIT_MODAL = 'CLOSE_SUBMIT_MODAL'
 
 export const SEND_COMMENT = 'SEND_COMMENT'
 export const EDIT_COMMENT = 'EDIT_COMMENT'
@@ -48,6 +50,20 @@ export function votePost ({ id, option }) {
 		type: VOTE_POST,
 		id,
 		option,
+	}
+}
+
+export function openSubmitModal () {
+	return {
+		type: OPEN_SUBMIT_MODAL,
+		open: true,
+	}
+}
+
+export function closeSubmitModal () {
+	return {
+		type: CLOSE_SUBMIT_MODAL,
+		close: false,
 	}
 }
 

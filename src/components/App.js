@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Link, Redirect } from 'react-router-dom'
+import { If, Then, Else } from 'react-if'
 import '../App.css';
 import Post from './Post'
 import CategoryPosts from './CategoryPosts'
@@ -7,6 +8,8 @@ import PostDetails from './PostDetails'
 import PostSubmit from './PostSubmit'
 import * as ReadableAPI from '../ReadableAPI'
 import { connect } from 'react-redux'
+import Modal from 'react-modal'
+import { openSubmitModal, closeSubmitModal } from '../actions'
 
 class App extends Component {
 
@@ -59,6 +62,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    Modal.setAppElement(App)
     //this.getCategoryPosts(this.state.category)
     //this.getPost(this.state.post)
     //this.getAllPosts()
@@ -100,8 +104,8 @@ class App extends Component {
               <section className="app-post-header">
                 <h2 className="posts-title">Discussion</h2>
               </section>
+
               <section className="posts-content">
-                <PostSubmit />
 
               {this.props.categories.map((category) => (
                 <Route key={category.path} exact path={`/${category.path}`} render={() => (
@@ -114,6 +118,9 @@ class App extends Component {
           <section className="actions-section">
             <section className="actions-wrapper">
               <h2> Actions </h2>
+              <button onClick={this.props.openSubmitModal}>
+              Add
+              </button>
             </section>
           </section>
 
@@ -125,6 +132,13 @@ class App extends Component {
             </section>
           )}/>
         </div>
+
+        <If condition={this.props.submitModal}>
+          <Then>
+            <PostSubmit />
+          </Then>
+        </If>
+
         <footer></footer>
       </div>
     )
@@ -143,7 +157,15 @@ function mapStateToProps({ post, comment }) {
       return postsArray
     }, []),
     categories: post.categories,
+    submitModal: post.submitModal,
   }
 }
 
-export default connect(mapStateToProps)(App);
+function mapDispatchToProps(dispatch) {
+  return {
+    openSubmitModal: () => dispatch(openSubmitModal()),
+    closeSubmitModal: () => dispatch(closeSubmitModal()),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

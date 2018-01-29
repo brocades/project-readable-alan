@@ -6,6 +6,8 @@ import {
 	DELETE_POST,
 	VOTE_POST,
 	UPDATE_COMMENT_COUNT,
+	OPEN_SUBMIT_MODAL,
+	CLOSE_SUBMIT_MODAL,
 	SEND_COMMENT,
 	EDIT_COMMENT,
 	DELETE_COMMENT,
@@ -31,7 +33,8 @@ const initialPostsState = {
       name: 'udacity',
       path: 'udacity'
     }
-  ]
+  ],
+  submitModal: false,
 }
 
 const initialCommentsState = {
@@ -100,6 +103,16 @@ function post (state = initialPostsState, action) {
 						commentCount: newCommentCount,
 					}
 				}
+			}
+		case OPEN_SUBMIT_MODAL:
+			return {
+				...state,
+				submitModal: action.open,
+			}
+		case CLOSE_SUBMIT_MODAL:
+			return {
+				...state,
+				submitModal: action.close,
 			}
 		default:
 			return state

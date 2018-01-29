@@ -87,7 +87,12 @@ h3 {
 }
 
 .post-title-input {
-	display: inline-block;
+	display: block;
+	border: 0;
+	border-bottom: 2px;
+  border-bottom-color: deepskyblue;
+	border-bottom-style: solid;
+  outline: none;
 }
 
 .post-body {
@@ -105,4 +110,12 @@ h3 {
 
 .post-input-button {
 	display: inline-block;
+}
+
+.post-upload-form {
+	margin: 0 auto;
+  width: 600px;
+  height: 300px;
+  margin-top: 80px;
+  background-color: white;
 }

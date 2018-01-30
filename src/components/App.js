@@ -104,17 +104,20 @@ class App extends Component {
               <section className="app-post-header">
                 <h2 className="posts-title">Discussion</h2>
               </section>
-
-              <section className="posts-content">
-
               {this.props.categories.map((category) => (
                 <Route key={category.path} exact path={`/${category.path}`} render={() => (
                   <CategoryPosts category={category.name}/>
                   )}/>
                 ))}
-              </section>
             </section>
           )}/>
+
+          <Route exact path="/:category/:id" render={({ match }) => (
+            <PostDetails
+              key={match.params.id}
+              post={this.getPostDetails(match.params.id)}/>
+          )}/>
+
           <section className="actions-section">
             <section className="actions-wrapper">
               <h2> Actions </h2>
@@ -124,13 +127,6 @@ class App extends Component {
             </section>
           </section>
 
-          <Route exact path="/:category/:id" render={({ match }) => (
-            <section className="posts-section">
-              <PostDetails
-                key={match.params.id}
-                post={this.getPostDetails(match.params.id)}/>
-            </section>
-          )}/>
         </div>
 
         <If condition={this.props.submitModal}>

@@ -3,12 +3,13 @@ import { connect } from 'react-redux'
 import { If, Then, Else } from 'react-if'
 import { Link } from 'react-router-dom'
 import { FaAngleUp, FaAngleDown, FaEdit, FaClose, FaBan } from 'react-icons/lib/fa'
-import '../post.css'
+import '../postdetails.css'
 import Comment from './Comment'
 import * as ReadableAPI from '../ReadableAPI'
 import serializeForm from 'form-serialize'
 import PropTypes from 'prop-types'
 import { editPost, deletePost, votePost, deleteComment } from '../actions'
+let moment = require('moment');
 
 class PostDetails extends Component {
 
@@ -73,6 +74,18 @@ class PostDetails extends Component {
 		return categoriesList.slice(1)
 	}
 
+	getReadableDate() {
+		const previousMoment = moment(this.props.post.timestamp)
+		const currentMoment = moment()
+		const dateDifference = {
+			hours: currentMoment.diff(previousMoment, 'hours'),
+			minutes: currentMoment.diff(previousMoment, 'minutes'),
+			seconds: currentMoment.diff(previousMoment, 'seconds'),
+		}
+		return `Posted ${dateDifference.hours}h ${dateDifference.minutes}m ${dateDifference.seconds}s ago`
+	}
+
+
 	getPostProps() {
 		let props = {
 			id: null,
@@ -92,81 +105,40 @@ class PostDetails extends Component {
 		const { id, voteScore, title, author, body, category, commentCount, comments } = this.getPostProps()
 		const categories = this.getValidCategories()
 		return (
-			<section id={id} className="post">
-				<If condition={this.isEditting() === false}>
-					<Then>
-						<section className="post-wrapper">
-							<section className="post-vote-score-section">
-								<FaAngleUp onClick={() => this.upVotePost(id)}/>
-									<p className="post-vote-score">{voteScore}</p>
-								<FaAngleDown onClick={() => this.downVotePost(id)}/>
-							</section>
-							<section className="post-section">
-								<section className="post-title">
-									<section className="post-title-texts">
-										<h3>{title} by {author}  {commentCount} comments
-										</h3>
-									</section>
-									<section className="post-title-buttons">
-										<div className="edit-button" onClick={() => this.toggleEditting()}>
-											<FaEdit/>
-										</div>
-										<Link onClick={() => this.deletePost(id)} to="/">
-											<div className="delete-button">
-												<FaClose/>
-											</div>
-										</Link>
-									</section>
-								</section>
-								<section className="post-body">
-									<p className="post-body-text">{body}</p>
+			<section className="posts-section">
+				<section className="app-postdetails-header">
+	      	<h2 className="posts-title">{title}</h2>
+	      </section>
 
+				<section id={id} className="post">
+					<If condition={this.isEditting() === false}>
+						<Then>
+							<section className="postdetails-wrapper">
+								<section className="postdetails-vote-score-section">
+									<FaAngleUp onClick={() => this.upVotePost(id)}/>
+										<p className="postdetails-vote-score">{voteScore}</p>
+									<FaAngleDown onClick={() => this.downVotePost(id)}/>
 								</section>
-								<If condition={comments instanceof Array}>
-									<Then>
-										<section className="comments-wrapper">
-											{comments
-												.filter((comment) => !comment.deleted)
-												.map((comment) => (
-														<Comment
-															type="details"
-															parentId={id}
-															key={comment.id}
-															comment={comment}/>
-													))}
-											<Comment type="submit" parentId={id}/>
+								<section className="postdetails-section">
+									<section className="postdetails-title">
+										<section className="postdetails-title-texts">
+											<h3>by {author}  {commentCount} comments {this.getReadableDate()}
+											</h3>
 										</section>
-									</Then>
-									<Else>
-										<p>Be the first to comment!</p>
-									</Else>
-								</If>
-							</section>
-						</section>
-					</Then>
-					<Else>
-						<form onSubmit={this.handlePostEdit}>
-							<section className="post-wrapper">
-								<section className="post-section">
-									<section className="post-header">
-										<input className="post-title-input" type="text" name="title" defaultValue={title} placeholder="React is awesome!"/>
-										<h3>by</h3>
-										<input className="post-author-input" type="text" name="author" defaultValue={author} placeholder="ex.: Alan Brochier"/>
-										<select className="post-category-input" defaultValue={category} name="category">
-											{categories.map((category, index) => (
-													<option
-														key={index}
-														value={category.name}>{category.name}</option>
-												))}
-										</select>
-										<div className="cancel-button" onClick={() => this.toggleEditting()}>
-											<FaBan/>
-										</div>
+										<section className="postdetails-title-buttons">
+											<div className="edit-button" onClick={() => this.toggleEditting()}>
+												<FaEdit/>
+											</div>
+											<Link onClick={() => this.deletePost(id)} to="/">
+												<div className="delete-button">
+													<FaClose/>
+												</div>
+											</Link>
+										</section>
 									</section>
-									<section className="post-body">
-										<textarea className="post-body-input" name="body" defaultValue={body} placeholder="Write your commentary here...">
-										</textarea>
-										<input className="post-input-button" type="submit" value="Send"/>
+									<section className="postdetails-body">
+										<p className="postdetails-body-text">{body}</p>
+
 									</section>
 									<If condition={comments instanceof Array}>
 										<Then>
@@ -174,12 +146,13 @@ class PostDetails extends Component {
 												{comments
 													.filter((comment) => !comment.deleted)
 													.map((comment) => (
-														<Comment
-															key={comment.id}
-															type="details"
-															parentId={id}
-															comment={comment}/>
-													))}
+															<Comment
+																type="details"
+																parentId={id}
+																key={comment.id}
+																comment={comment}/>
+														))}
+												<Comment type="submit" parentId={id}/>
 											</section>
 										</Then>
 										<Else>
@@ -188,9 +161,55 @@ class PostDetails extends Component {
 									</If>
 								</section>
 							</section>
-						</form>
-					</Else>
-				</If>
+						</Then>
+						<Else>
+							<form onSubmit={this.handlePostEdit}>
+								<section className="postdetails-wrapper">
+									<section className="postdetails-section">
+										<section className="postdetails-header">
+											<input className="postdetails-title-input" type="text" name="title" defaultValue={title} placeholder="React is awesome!"/>
+											<h3>by</h3>
+											<input className="postdetails-author-input" type="text" name="author" defaultValue={author} placeholder="ex.: Alan Brochier"/>
+											<select className="postdetails-category-input" defaultValue={category} name="category">
+												{categories.map((category, index) => (
+														<option
+															key={index}
+															value={category.name}>{category.name}</option>
+													))}
+											</select>
+											<div className="cancel-button" onClick={() => this.toggleEditting()}>
+												<FaBan/>
+											</div>
+										</section>
+										<section className="postdetails-body">
+											<textarea className="postdetails-body-input" name="body" defaultValue={body} placeholder="Write your commentary here...">
+											</textarea>
+											<input className="postdetails-input-button" type="submit" value="Send"/>
+										</section>
+										<If condition={comments instanceof Array}>
+											<Then>
+												<section className="comments-wrapper">
+													{comments
+														.filter((comment) => !comment.deleted)
+														.map((comment) => (
+															<Comment
+																key={comment.id}
+																type="details"
+																parentId={id}
+																comment={comment}/>
+														))}
+												</section>
+											</Then>
+											<Else>
+												<p>Be the first to comment!</p>
+											</Else>
+										</If>
+									</section>
+								</section>
+							</form>
+						</Else>
+					</If>
+				</section>
 			</section>
 		)
 	}

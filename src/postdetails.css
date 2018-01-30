@@ -9,7 +9,7 @@
 
 /* Vote Score section */
 
-.post-vote-score-section {
+.postdetails-vote-score-section {
 	display: table-cell;
 	border: 0;
   border-right: 1px solid lightgrey;
@@ -21,17 +21,17 @@
 	overflow: hidden;
 }
 
-.post-vote-score-section svg {
+.postdetails-vote-score-section svg {
 	cursor: pointer;
 }
 
-.post-vote-score-section svg:active {
+.postdetails-vote-score-section svg:active {
 	color: lightgrey;
 }
 
 /* Post section */
 
-.post-wrapper {
+.postdetails-wrapper {
 
 }
 
@@ -60,56 +60,56 @@ h3 {
 	text-align: center;
 }
 
-.post-section {
+.postdetails-section {
 	display: table-cell;
 	width: 96%;
 }
 
-.post-vote-score {
+.postdetails-vote-score {
 	font-size: 75%;
 }
 
-.post-header {
+.postdetails-header {
 	border: 0;
 }
 
-.post-form input {
+.postdetails-form input {
 	border: none;
   border-bottom: 1px solid #ddd;
 }
 
-.post-author-input {
+.postdetails-author-input {
 	display: inline-block;
 }
 
-.post-category-input {
+.postdetails-category-input {
 	display: inline-block;
 }
 
-.post-title {
+.postdetails-title {
 	display: block;
 	box-sizing: border-box;
 	border: 0;
   border-bottom: 1px solid lightgrey;
 }
 
-.post-title-texts {
+.postdetails-title-texts {
 	display: inline-block;
 	width: 90%;
 }
 
-.post-title-texts a {
+.postdetails-title-texts a {
 	text-transform: capitalize;
 	color: deepskyblue;
 	cursor: pointer;
 }
 
-.post-title-buttons {
+.postdetails-title-buttons {
 	display: inline-block;
 	width: 10%;
 }
 
-.post-title-input {
+.postdetails-title-input {
 	display: block;
 	border: 0;
 	border-bottom: 2px;
@@ -118,24 +118,24 @@ h3 {
   outline: none;
 }
 
-.post-body {
+.postdetails-body {
 	padding: 5px;
   margin: 2px;
 }
 
-.post-body-text {
+.postdetails-body-text {
 
 }
 
-.post-body-input {
+.postdetails-body-input {
 	display: inline-block;
 }
 
-.post-input-button {
+.postdetails-input-button {
 	display: inline-block;
 }
 
-.post-upload-form {
+.postdetails-upload-form {
 	margin: 0 auto;
   width: 600px;
   height: 300px;

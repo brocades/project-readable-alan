@@ -77,12 +77,13 @@ class PostDetails extends Component {
 	getReadableDate() {
 		const previousMoment = moment(this.props.post.timestamp)
 		const currentMoment = moment()
+		const seconds = currentMoment.diff(previousMoment, 'seconds')
 		const dateDifference = {
-			hours: currentMoment.diff(previousMoment, 'hours'),
-			minutes: currentMoment.diff(previousMoment, 'minutes'),
-			seconds: currentMoment.diff(previousMoment, 'seconds'),
+			seconds: seconds,
+			minutes: Math.round(seconds/60),
+			hours: Math.round(seconds/3600),
 		}
-		return `Posted ${dateDifference.hours}h ${dateDifference.minutes}m ${dateDifference.seconds}s ago`
+		return `${dateDifference.minutes} minutes ago`
 	}
 
 
@@ -107,7 +108,7 @@ class PostDetails extends Component {
 		return (
 			<section className="posts-section">
 				<section className="app-postdetails-header">
-	      	<h2 className="posts-title">{title}</h2>
+	      	<h2 className="postdetails-title">{title}</h2>
 	      </section>
 
 				<section id={id} className="post">
@@ -120,10 +121,12 @@ class PostDetails extends Component {
 									<FaAngleDown onClick={() => this.downVotePost(id)}/>
 								</section>
 								<section className="postdetails-section">
-									<section className="postdetails-title">
+									<section className="postdetails-title-content">
 										<section className="postdetails-title-texts">
-											<h3>by {author}  {commentCount} comments {this.getReadableDate()}
-											</h3>
+											<h4>by </h4><h3>{author}</h3>
+										</section>
+										<section className="postdetails-timeposted">
+											<h4>Posted {this.getReadableDate()} </h4>
 										</section>
 										<section className="postdetails-title-buttons">
 											<div className="edit-button" onClick={() => this.toggleEditting()}>
@@ -136,10 +139,11 @@ class PostDetails extends Component {
 											</Link>
 										</section>
 									</section>
+
 									<section className="postdetails-body">
 										<p className="postdetails-body-text">{body}</p>
-
 									</section>
+									<h4>This post has {commentCount} comment(s)</h4>
 									<If condition={comments instanceof Array}>
 										<Then>
 											<section className="comments-wrapper">

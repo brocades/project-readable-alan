@@ -112,9 +112,9 @@ class Comment extends Component {
 							<Then>
 								<section className="comment-wrapper">
 									<section className="comment-vote-score-section">
-										<FaAngleUp onClick={() => this.upVoteComment(id)}/>
+										<FaAngleUp className="action-button" onClick={() => this.upVoteComment(id)}/>
 											<p className="comment-vote-score">{voteScore}</p>
-										<FaAngleDown onClick={() => this.downVoteComment(id)}/>
+										<FaAngleDown className="action-button" onClick={() => this.downVoteComment(id)}/>
 									</section>
 									<section className="comment-section">
 										<section className="comment-header">
@@ -122,10 +122,10 @@ class Comment extends Component {
 												<h4>by </h4><h3>{author}</h3>
 											</section>
 											<section className="comment-header-buttons">
-												<div className="edit-button" onClick={() => this.toggleEditting()}>
+												<div className="edit-button action-button" onClick={() => this.toggleEditting()}>
 													<FaEdit/>
 												</div>
-												<div className="delete-button" onClick={() => this.deleteComment(id)}>
+												<div className="delete-button action-button" onClick={() => this.deleteComment(id)}>
 													<FaClose/>
 												</div>
 											</section>
@@ -145,7 +145,7 @@ class Comment extends Component {
 													<input className="comment-author-input" type="text" name="author" defaultValue={author} placeholder="My name is..."/>
 												</section>
 												<section className="comment-header-buttons">
-													<div className="cancel-button" onClick={() => this.toggleEditting()}>
+													<div className="cancel-button action-button" onClick={() => this.toggleEditting()}>
 														<FaBan/>
 													</div>
 												</section>

@@ -116,9 +116,9 @@ class PostDetails extends Component {
 						<Then>
 							<section className="postdetails-wrapper">
 								<section className="postdetails-vote-score-section">
-									<FaAngleUp onClick={() => this.upVotePost(id)}/>
+									<FaAngleUp className="action-button" onClick={() => this.upVotePost(id)}/>
 										<p className="postdetails-vote-score">{voteScore}</p>
-									<FaAngleDown onClick={() => this.downVotePost(id)}/>
+									<FaAngleDown className="action-button" onClick={() => this.downVotePost(id)}/>
 								</section>
 								<section className="postdetails-section">
 									<section className="postdetails-title-content">
@@ -129,11 +129,11 @@ class PostDetails extends Component {
 											<h4>Posted {this.getReadableDate()} </h4>
 										</section>
 										<section className="postdetails-title-buttons">
-											<div className="edit-button" onClick={() => this.toggleEditting()}>
+											<div className="edit-button action-button" onClick={() => this.toggleEditting()}>
 												<FaEdit/>
 											</div>
 											<Link onClick={() => this.deletePost(id)} to="/">
-												<div className="delete-button">
+												<div className="delete-button action-button">
 													<FaClose/>
 												</div>
 											</Link>
@@ -167,12 +167,13 @@ class PostDetails extends Component {
 							</section>
 						</Then>
 						<Else>
-							<form onSubmit={this.handlePostEdit}>
-								<section className="postdetails-wrapper">
-									<section className="postdetails-section">
-										<section className="postdetails-header">
+							<form className="postdetails-form" onSubmit={this.handlePostEdit}>
+							<section className="postdetails-wrapper">
+								<section className="postdetails-edit-section">
+									<section className="postdetails-header">
+										<section className="postdetails-edit-title-texts">
 											<input className="postdetails-title-input" type="text" name="title" defaultValue={title} placeholder="React is awesome!"/>
-											<h3>by</h3>
+											<h4>by</h4>
 											<input className="postdetails-author-input" type="text" name="author" defaultValue={author} placeholder="ex.: Alan Brochier"/>
 											<select className="postdetails-category-input" defaultValue={category} name="category">
 												{categories.map((category, index) => (
@@ -181,36 +182,24 @@ class PostDetails extends Component {
 															value={category.name}>{category.name}</option>
 													))}
 											</select>
-											<div className="cancel-button" onClick={() => this.toggleEditting()}>
+										</section>
+
+										<section className="postdetails-title-buttons">
+											<div className="cancel-button action-button" onClick={() => this.toggleEditting()}>
 												<FaBan/>
 											</div>
 										</section>
-										<section className="postdetails-body">
-											<textarea className="postdetails-body-input" name="body" defaultValue={body} placeholder="Write your commentary here...">
-											</textarea>
-											<input className="postdetails-input-button" type="submit" value="Send"/>
-										</section>
-										<If condition={comments instanceof Array}>
-											<Then>
-												<section className="comments-wrapper">
-													{comments
-														.filter((comment) => !comment.deleted)
-														.map((comment) => (
-															<Comment
-																key={comment.id}
-																type="details"
-																parentId={id}
-																comment={comment}/>
-														))}
-												</section>
-											</Then>
-											<Else>
-												<p>Be the first to comment!</p>
-											</Else>
-										</If>
+									</section>
+									<section className="postdetails-body">
+										<textarea className="postdetails-body-input" name="body" defaultValue={body} placeholder="Write your commentary here...">
+										</textarea>
+										<button className="postdetails-input-button" type="submit">
+										Send
+										</button>
 									</section>
 								</section>
-							</form>
+							</section>
+						</form>
 						</Else>
 					</If>
 				</section>

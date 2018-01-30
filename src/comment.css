@@ -1,10 +1,16 @@
 .comment {
 	text-align: left;
 	margin: 0 auto;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   width: 96%;
 	box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
 	background-color: white;
+	animation: fade 0.5s linear;
+}
+
+@keyframes fade {
+  0%,100% { opacity: 0 }
+  100% { opacity: 1 }
 }
 
 /* Vote Score section */
@@ -21,13 +27,6 @@
 	overflow: hidden;
 }
 
-.comment-vote-score-section svg {
-	cursor: pointer;
-}
-
-.comment-vote-score-section svg:active {
-	color: lightgrey;
-}
 
 /* Comment section */
 
@@ -39,23 +38,39 @@
 	font-size: 1em;
 }
 
-.edit-button {
-	display: inline-block;
-	width: 50%;
-	text-align: center;
+/* Comment buttons */
+
+.comment-vote-score-section svg {
+	cursor: pointer;
 }
 
-.delete-button {
+.comment-vote-score-section svg:active {
+	color: lightgrey;
+}
+
+.action-button {
 	display: inline-block;
-	width: 50%;
 	text-align: center;
+	cursor: pointer;
+}
+
+.action-button:hover {
+	color: deepskyblue;
+}
+
+.action-button:active {
+	color: lightgrey;
+}
+
+.edit-button, .delete-button {
+	width: 50%;
 }
 
 .cancel-button {
-	display: inline-block;
 	width: 100%;
-	text-align: center;
 }
+
+/* Comment buttons */
 
 .comment-section {
 	display: table-cell;

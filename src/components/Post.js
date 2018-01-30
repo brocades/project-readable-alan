@@ -131,26 +131,32 @@ class Post extends Component {
 					<Then>
 						<section className="post-wrapper">
 							<section className="post-vote-score-section">
-								<FaAngleUp onClick={() => this.upVotePost(id)}/>
+								<FaAngleUp className="action-button" onClick={() => this.upVotePost(id)}/>
 									<p className="post-vote-score">{voteScore}</p>
-								<FaAngleDown onClick={() => this.downVotePost(id)}/>
+								<FaAngleDown className="action-button" onClick={() => this.downVotePost(id)}/>
 							</section>
 							<section className="post-section">
 								<section className="post-title">
 									<section className="post-title-texts">
-										<h3><Link
-													to={`/${category}/${id}`}>{title}
-													</Link> by {author} {commentCount} comments
-										</h3>
-
+										<Link
+													to={`/${category}/${id}`}><h3>{title}</h3>
+										</Link>
+										<h4>by </h4><h3>{author}</h3>
 									</section>
+
+									<section className="post-comments-count">
+										<h4>{commentCount} comments</h4>
+									</section>
+
 									<section className="post-title-buttons">
-										<div className="edit-button" onClick={() => this.toggleEditting()}>
+										<div className="edit-button action-button" onClick={() => this.toggleEditting()}>
 											<FaEdit/>
 										</div>
-										<div className="delete-button">
-											<FaClose/>
-										</div>
+										<Link onClick={() => this.deletePost(id)} to="/">
+											<div className="delete-button action-button">
+												<FaClose/>
+											</div>
+										</Link>
 									</section>
 								</section>
 								<section className="post-body">
@@ -183,26 +189,33 @@ class Post extends Component {
 					<Else>
 						<form className="post-form" onSubmit={this.handlePostEdit}>
 							<section className="post-wrapper">
-								<section className="post-section">
+								<section className="post-edit-section">
 									<section className="post-header">
-										<input className="post-title-input" type="text" name="title" defaultValue={title} placeholder="React is awesome!"/>
-										<h3>by</h3>
-										<input className="post-author-input" type="text" name="author" defaultValue={author} placeholder="ex.: Alan Brochier"/>
-										<select className="post-category-input" defaultValue={category} name="category">
-											{categories.map((category, index) => (
-													<option
-														key={index}
-														value={category.name}>{category.name}</option>
-												))}
-										</select>
-										<div className="cancel-button" onClick={() => this.toggleEditting()}>
-											<FaBan/>
-										</div>
+										<section className="post-title-texts">
+											<input className="post-title-input" type="text" name="title" defaultValue={title} placeholder="React is awesome!"/>
+											<h4>by</h4>
+											<input className="post-author-input" type="text" name="author" defaultValue={author} placeholder="ex.: Alan Brochier"/>
+											<select className="post-category-input" defaultValue={category} name="category">
+												{categories.map((category, index) => (
+														<option
+															key={index}
+															value={category.name}>{category.name}</option>
+													))}
+											</select>
+										</section>
+
+										<section className="post-title-buttons">
+											<div className="cancel-button action-button" onClick={() => this.toggleEditting()}>
+												<FaBan/>
+											</div>
+										</section>
 									</section>
 									<section className="post-body">
 										<textarea className="post-body-input" name="body" defaultValue={body} placeholder="Write your commentary here...">
 										</textarea>
-										<input className="post-input-button" type="submit" value="Send"/>
+										<button className="post-input-button" type="submit">
+										Send
+										</button>
 									</section>
 									<section id="commentsSection" className="collapse-comments">
 										<If condition={comments instanceof Array}>

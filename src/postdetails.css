@@ -42,22 +42,26 @@ h3 {
 	display: inline-block;
 }
 
-.edit-button {
+.action-button {
 	display: inline-block;
-	width: 50%;
 	text-align: center;
+	cursor: pointer;
 }
 
-.delete-button {
-	display: inline-block;
+.action-button:hover {
+	color: deepskyblue;
+}
+
+.action-button:active {
+	color: lightgrey;
+}
+
+.edit-button, .delete-button {
 	width: 50%;
-	text-align: center;
 }
 
 .cancel-button {
-	display: inline-block;
 	width: 100%;
-	text-align: center;
 }
 
 .postdetails-section {
@@ -80,11 +84,15 @@ h3 {
 
 .postdetails-header {
 	border: 0;
+	padding: 5px;
+	border-bottom: 1px solid lightgray;
 }
 
 .postdetails-form input {
-	border: none;
-  border-bottom: 1px solid #ddd;
+	display: inline-block;
+  border: none;
+  border-bottom: 1px solid deepskyblue;
+  padding: 6px;
 }
 
 .postdetails-author-input {
@@ -93,6 +101,8 @@ h3 {
 
 .postdetails-category-input {
 	display: inline-block;
+	padding: 2px;
+  margin-left: 40px;
 }
 
 .postdetails-title-content {
@@ -109,6 +119,11 @@ h3 {
 .postdetails-title-texts {
 	display: inline-block;
 	width: 60%;
+}
+
+.postdetails-edit-title-texts {
+	display: inline-block;
+	width: 90%;
 }
 
 .postdetails-timeposted {
@@ -147,11 +162,35 @@ h3 {
 }
 
 .postdetails-body-input {
-	display: inline-block;
+	display: block;
+  width: 90%;
+  font-size: 1em;
+  padding: 6px;
+  border: 0;
+  border-bottom: 1px;
+  border-bottom-color: deepskyblue;
+  border-bottom-style: solid;
+  outline: none;
 }
 
 .postdetails-input-button {
-	display: inline-block;
+	border: 0;
+  display: block;
+  margin: 0 auto;
+  margin-top: 10px;
+  height: 35px;
+	width: 120px;
+  cursor: pointer;
+  font-size: 1.2em;
+}
+
+.postdetails-input-button:active {
+	background-color: deepskyblue;
+  color: white;
+}
+
+.postdetails-input-button:focus {
+	outline: 0;
 }
 
 .postdetails-upload-form {

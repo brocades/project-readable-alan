@@ -116,6 +116,11 @@ h3 {
 	width: 70%;
 }
 
+.post-edit-title-texts {
+	display: inline-block;
+	width: 90%;
+}
+
 .post-title-texts a {
 	text-transform: capitalize;
 	color: deepskyblue;

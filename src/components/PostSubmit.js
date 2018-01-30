@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import '../submitpost.css'
 import * as ReadableAPI from '../ReadableAPI'
+import { FaClose } from 'react-icons/lib/fa'
 import serializeForm from 'form-serialize'
 import PropTypes from 'prop-types'
 import { sendPost, closeSubmitModal } from '../actions'
@@ -11,6 +12,10 @@ class PostSubmit extends Component {
 
 	state = {
 		selectedCategory: "react",
+	}
+
+	initializeView() {
+		this.controlSelectedColor(this.state.selectedCategory)
 	}
 
 	handlePostUpload = (e) => {
@@ -28,7 +33,6 @@ class PostSubmit extends Component {
 			...defaultValues,
 			...inputValues
 		}
-		//TODO dispatch post list update action
 		this.props.uploadPost(post)
 		ReadableAPI.uploadPost(post)
 			.catch((reason) => {
@@ -67,11 +71,16 @@ class PostSubmit extends Component {
 		return categoriesList.slice(1)
 	}
 
+	componentDidMount() {
+		this.initializeView()
+	}
+
 	render() {
 		const categories = this.getValidCategories()
 		return (
 			<div className="postsubmit-modal">
 				<section className="postsubmit-wrapper">
+					<FaClose onClick={this.props.closeSubmitModal} className="postsubmit-close-modal"/>
 					<form id="postUploadForm" className="postsubmit-upload-form" onSubmit={this.handlePostUpload}>
 						<section className="postsubmit-section">
 							<section className="postsubmit-header">
@@ -92,7 +101,7 @@ class PostSubmit extends Component {
 								<label>
 									Title
 								</label>
-								<input
+								<input required autofocus
 									className="postsubmit-title-input"
 									type="text"
 									name="title"/>
@@ -100,7 +109,7 @@ class PostSubmit extends Component {
 								<label>
 									Author
 								</label>
-								<input
+								<input required
 									className="postsubmit-author-input"
 									type="text"
 									name="author"/>
@@ -109,7 +118,7 @@ class PostSubmit extends Component {
 								<label>
 									Content
 								</label>
-								<textarea
+								<textarea required
 									className="postsubmit-body-input"
 									name="body">
 								</textarea>

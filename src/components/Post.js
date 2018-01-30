@@ -191,11 +191,25 @@ class Post extends Component {
 							<section className="post-wrapper">
 								<section className="post-edit-section">
 									<section className="post-header">
-										<section className="post-title-texts">
-											<input className="post-title-input" type="text" name="title" defaultValue={title} placeholder="React is awesome!"/>
+										<section className="post-edit-title-texts">
+											<input required
+												className="post-title-input"
+												type="text"
+												name="title"
+												defaultValue={title}/>
+
 											<h4>by</h4>
-											<input className="post-author-input" type="text" name="author" defaultValue={author} placeholder="ex.: Alan Brochier"/>
-											<select className="post-category-input" defaultValue={category} name="category">
+
+											<input required
+												className="post-author-input"
+												type="text"
+												name="author"
+												defaultValue={author}/>
+
+											<select
+												className="post-category-input"
+												defaultValue={category}
+												name="category">
 												{categories.map((category, index) => (
 														<option
 															key={index}
@@ -210,13 +224,18 @@ class Post extends Component {
 											</div>
 										</section>
 									</section>
+
 									<section className="post-body">
-										<textarea className="post-body-input" name="body" defaultValue={body} placeholder="Write your commentary here...">
+										<textarea required
+											className="post-body-input"
+											name="body"
+											defaultValue={body}>
 										</textarea>
 										<button className="post-input-button" type="submit">
 										Send
 										</button>
 									</section>
+
 									<section id="commentsSection" className="collapse-comments">
 										<If condition={comments instanceof Array}>
 											<Then>

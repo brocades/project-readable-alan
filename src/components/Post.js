@@ -142,6 +142,7 @@ class Post extends Component {
 													to={`/${category}/${id}`}>{title}
 													</Link> by {author} {commentCount} comments
 										</h3>
+
 									</section>
 									<section className="post-title-buttons">
 										<div className="edit-button" onClick={() => this.toggleEditting()}>

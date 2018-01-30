@@ -115,12 +115,17 @@
 .postsubmit-input-button {
 	border: 0;
   display: block;
-  margin: 0 10px;
+  margin: 0 auto;
   margin-top: 10px;
   height: 35px;
 	width: 160px;
   cursor: pointer;
   font-size: 130%;
+}
+
+.postsubmit-input-button:active {
+	background-color: deepskyblue;
+  color: white;
 }
 
 .postsubmit-input-button:focus {

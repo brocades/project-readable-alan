@@ -118,14 +118,17 @@ class Comment extends Component {
 									</section>
 									<section className="comment-section">
 										<section className="comment-header">
-											<h3>by {author}
-											</h3>
-											<div className="edit-button" onClick={() => this.toggleEditting()}>
-												<FaEdit/>
-											</div>
-											<div className="delete-button" onClick={() => this.deleteComment(id)}>
-												<FaClose/>
-											</div>
+											<section className="comment-header-texts">
+												<h4>by </h4><h3>{author}</h3>
+											</section>
+											<section className="comment-header-buttons">
+												<div className="edit-button" onClick={() => this.toggleEditting()}>
+													<FaEdit/>
+												</div>
+												<div className="delete-button" onClick={() => this.deleteComment(id)}>
+													<FaClose/>
+												</div>
+											</section>
 										</section>
 										<section className="comment-body">
 											<p className="comment-body-text">{body}</p>
@@ -134,19 +137,23 @@ class Comment extends Component {
 								</section>
 							</Then>
 							<Else>
-								<form onSubmit={this.handleCommentUpdate}>
+								<form onSubmit={this.handleCommentUpdate} className="comment-upload-form">
 									<section className="comment-wrapper">
-										<section className="comment-section">
-											<section className="comment-header">
-												<input className="comment-author-input" type="text" name="author" defaultValue={author} placeholder="ex.: Alan Brochier"/>
-												<div className="cancel-button" onClick={() => this.toggleEditting()}>
-													<FaBan/>
-												</div>
+										<section className="comment-upload-section">
+											<section className="comment-upload-header">
+												<section className="comment-header-texts">
+													<input className="comment-author-input" type="text" name="author" defaultValue={author} placeholder="My name is..."/>
+												</section>
+												<section className="comment-header-buttons">
+													<div className="cancel-button" onClick={() => this.toggleEditting()}>
+														<FaBan/>
+													</div>
+												</section>
 											</section>
 											<section className="comment-body">
 												<textarea className="comment-body-input" name="body" defaultValue={body} placeholder="Write your commentary here...">
 												</textarea>
-												<input type="submit" value="Send"/>
+												<button className="comment-upload-button" type="submit">Send</button>
 											</section>
 										</section>
 									</section>
@@ -156,16 +163,16 @@ class Comment extends Component {
 					</section>
 				</Then>
 				<Else>
-					<form id="commentUploadForm" onSubmit={this.handleCommentUpload}>
+					<form id="commentUploadForm" className="comment-upload-form" onSubmit={this.handleCommentUpload}>
 						<section className="comment-wrapper">
-								<section className="comment-section">
-									<section className="comment-header">
-										<input className="comment-author-input" type="text" name="author" placeholder="ex.: Alan Brochier"/>
+								<section className="comment-upload-section">
+									<section className="comment-upload-header">
+										<input className="comment-author-input" type="text" name="author" placeholder="My name is..."/>
 									</section>
 									<section className="comment-body">
-										<textarea className="comment-body-input" type="text" name="body" placeholder="Write your commentary here...">
+										<textarea className="comment-body-input" type="text" name="body" placeholder="Write your comment here...">
 										</textarea>
-										<input className="comment-input-button" type="submit" value="Send"/>
+										<button className="comment-upload-button" type="submit">Send</button>
 									</section>
 								</section>
 						</section>

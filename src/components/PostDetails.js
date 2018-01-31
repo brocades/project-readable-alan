@@ -120,18 +120,22 @@ class PostDetails extends Component {
 										<p className="postdetails-vote-score">{voteScore}</p>
 									<FaAngleDown className="action-button" onClick={() => this.downVotePost(id)}/>
 								</section>
+
 								<section className="postdetails-section">
 									<section className="postdetails-title-content">
 										<section className="postdetails-title-texts">
 											<h4>by </h4><h3>{author}</h3>
 										</section>
+
 										<section className="postdetails-timeposted">
 											<h4>Posted {this.getReadableDate()} </h4>
 										</section>
+
 										<section className="postdetails-title-buttons">
 											<div className="edit-button action-button" onClick={() => this.toggleEditting()}>
 												<FaEdit/>
 											</div>
+
 											<Link onClick={() => this.deletePost(id)} to="/">
 												<div className="delete-button action-button">
 													<FaClose/>
@@ -143,7 +147,9 @@ class PostDetails extends Component {
 									<section className="postdetails-body">
 										<p className="postdetails-body-text">{body}</p>
 									</section>
+
 									<h4>This post has {commentCount} comment(s)</h4>
+
 									<If condition={comments instanceof Array}>
 										<Then>
 											<section className="comments-wrapper">
@@ -159,6 +165,7 @@ class PostDetails extends Component {
 												<Comment type="submit" parentId={id}/>
 											</section>
 										</Then>
+
 										<Else>
 											<p>Be the first to comment!</p>
 										</Else>
@@ -168,38 +175,53 @@ class PostDetails extends Component {
 						</Then>
 						<Else>
 							<form className="postdetails-form" onSubmit={this.handlePostEdit}>
-							<section className="postdetails-wrapper">
-								<section className="postdetails-edit-section">
-									<section className="postdetails-header">
-										<section className="postdetails-edit-title-texts">
-											<input className="postdetails-title-input" type="text" name="title" defaultValue={title} placeholder="React is awesome!"/>
-											<h4>by</h4>
-											<input className="postdetails-author-input" type="text" name="author" defaultValue={author} placeholder="ex.: Alan Brochier"/>
-											<select className="postdetails-category-input" defaultValue={category} name="category">
-												{categories.map((category, index) => (
-														<option
-															key={index}
-															value={category.name}>{category.name}</option>
-													))}
-											</select>
+								<section className="postdetails-wrapper">
+									<section className="postdetails-edit-section">
+										<section className="postdetails-header">
+											<section className="postdetails-edit-title-texts">
+												<input required
+													className="postdetails-title-input"
+													type="text" name="title"
+													defaultValue={title}/>
+
+												<h4>by</h4>
+
+												<input required
+													className="postdetails-author-input"
+													type="text"
+													name="author"
+													defaultValue={author}/>
+
+												<select className="postdetails-category-input" defaultValue={category} name="category">
+													{categories.map((category, index) => (
+															<option
+																key={index}
+																value={category.name}>{category.name}</option>
+														))}
+												</select>
+											</section>
+
+											<section className="postdetails-title-buttons">
+												<div className="cancel-button action-button" onClick={() => this.toggleEditting()}>
+													<FaBan/>
+												</div>
+											</section>
 										</section>
 
-										<section className="postdetails-title-buttons">
-											<div className="cancel-button action-button" onClick={() => this.toggleEditting()}>
-												<FaBan/>
-											</div>
+										<section className="postdetails-body">
+											<textarea required
+												className="postdetails-body-input"
+												name="body"
+												defaultValue={body}>
+											</textarea>
+
+											<button className="postdetails-input-button" type="submit">
+											Send
+											</button>
 										</section>
 									</section>
-									<section className="postdetails-body">
-										<textarea className="postdetails-body-input" name="body" defaultValue={body} placeholder="Write your commentary here...">
-										</textarea>
-										<button className="postdetails-input-button" type="submit">
-										Send
-										</button>
-									</section>
 								</section>
-							</section>
-						</form>
+							</form>
 						</Else>
 					</If>
 				</section>

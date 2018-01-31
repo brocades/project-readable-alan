@@ -116,20 +116,24 @@ class Comment extends Component {
 											<p className="comment-vote-score">{voteScore}</p>
 										<FaAngleDown className="action-button" onClick={() => this.downVoteComment(id)}/>
 									</section>
+
 									<section className="comment-section">
 										<section className="comment-header">
 											<section className="comment-header-texts">
 												<h4>by </h4><h3>{author}</h3>
 											</section>
+
 											<section className="comment-header-buttons">
 												<div className="edit-button action-button" onClick={() => this.toggleEditting()}>
 													<FaEdit/>
 												</div>
+
 												<div className="delete-button action-button" onClick={() => this.deleteComment(id)}>
 													<FaClose/>
 												</div>
 											</section>
 										</section>
+
 										<section className="comment-body">
 											<p className="comment-body-text">{body}</p>
 										</section>
@@ -142,17 +146,27 @@ class Comment extends Component {
 										<section className="comment-upload-section">
 											<section className="comment-upload-header">
 												<section className="comment-header-texts">
-													<input className="comment-author-input" type="text" name="author" defaultValue={author} placeholder="My name is..."/>
+													<input required
+														className="comment-author-input"
+														type="text"
+														name="author"
+														defaultValue={author}/>
 												</section>
+
 												<section className="comment-header-buttons">
 													<div className="cancel-button action-button" onClick={() => this.toggleEditting()}>
 														<FaBan/>
 													</div>
 												</section>
 											</section>
+
 											<section className="comment-body">
-												<textarea className="comment-body-input" name="body" defaultValue={body} placeholder="Write your commentary here...">
+												<textarea required
+													className="comment-body-input"
+													name="body"
+													defaultValue={body}>
 												</textarea>
+
 												<button className="comment-upload-button" type="submit">Send</button>
 											</section>
 										</section>
@@ -167,11 +181,21 @@ class Comment extends Component {
 						<section className="comment-wrapper">
 								<section className="comment-upload-section">
 									<section className="comment-upload-header">
-										<input className="comment-author-input" type="text" name="author" placeholder="My name is..."/>
+										<input required
+											className="comment-author-input"
+											type="text"
+											name="author"
+											placeholder="My name is..."/>
 									</section>
+
 									<section className="comment-body">
-										<textarea className="comment-body-input" type="text" name="body" placeholder="Write your comment here...">
+										<textarea required
+											className="comment-body-input"
+											type="text"
+											name="body"
+											placeholder="Write your comment here...">
 										</textarea>
+
 										<button className="comment-upload-button" type="submit">Send</button>
 									</section>
 								</section>

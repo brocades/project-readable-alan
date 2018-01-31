@@ -1,5 +1,21 @@
 /* Postsubmit section */
 
+.postsubmit-close-modal {
+	display: block;
+	float: right;
+	padding: 5px;
+	font-size: 1.2em;
+	cursor: pointer;
+}
+
+.postsubmit-close-modal:hover {
+	color: deepskyblue;
+}
+
+.postsubmit-close-modal:active {
+	color: lightgrey;
+}
+
 .postsubmit-modal {
   position: fixed;
   z-index: 1;

@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux'
 
 import {
+	INITIALIZE_POSTS,
+	INITIALIZE_COMMENTS,
 	SEND_POST,
 	EDIT_POST,
 	DELETE_POST,
@@ -8,6 +10,7 @@ import {
 	UPDATE_COMMENT_COUNT,
 	OPEN_SUBMIT_MODAL,
 	CLOSE_SUBMIT_MODAL,
+	ORDER_BY,
 	SEND_COMMENT,
 	EDIT_COMMENT,
 	DELETE_COMMENT,
@@ -43,6 +46,36 @@ const initialCommentsState = {
 
 function post (state = initialPostsState, action) {
 	switch (action.type) {
+		case INITIALIZE_POSTS:
+			const { posts } = action
+			const allposts = posts.reduce((postsObject, singlePost) => {
+				return {
+					...postsObject,
+					[singlePost.id]: singlePost,
+				}
+			}, {})
+			return {
+				...state,
+				posts: {
+					...allposts,
+				}
+			}
+		case ORDER_BY:
+			const { compareFunction } = action
+			let postsList = Object.keys(state.posts).map(key => state.posts[key])
+			postsList.sort(compareFunction)
+			const sortedPosts = postsList.reduce((postsObject, singlePost) => {
+				return {
+					...postsObject,
+					[singlePost.id]: singlePost,
+				}
+			}, {})
+			return {
+				...state,
+				posts: {
+					...sortedPosts,
+				}
+			}
 		case SEND_POST:
 			const { post } = action
 			return {
@@ -121,6 +154,20 @@ function post (state = initialPostsState, action) {
 
 function comment (state = initialCommentsState, action) {
 	switch (action.type) {
+		case INITIALIZE_COMMENTS:
+			const { comments } = action
+			const allcomments = comments.reduce((commentsObject, singleComment) => {
+				return {
+					...commentsObject,
+					[singleComment.id]: singleComment,
+				}
+			}, {})
+			return {
+				...state,
+				comments: {
+					...allcomments
+				}
+			}
 		case SEND_COMMENT:
 			const { comment } = action
 			return {

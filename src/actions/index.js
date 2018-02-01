@@ -3,19 +3,35 @@ export const EDIT_POST = 'EDIT_POST'
 export const DELETE_POST = 'DELETE_POST'
 export const VOTE_POST = 'VOTE_POST'
 export const UPDATE_COMMENT_COUNT = 'UPDATE_COMMENT_COUNT'
-export const INITIALIZE_CONTENT = 'INITIALIZE_CONTENT'
+export const INITIALIZE_POSTS = 'INITIALIZE_POSTS'
+export const INITIALIZE_COMMENTS = 'INITIALIZE_COMMENTS'
 export const OPEN_SUBMIT_MODAL = 'OPEN_SUBMIT_MODAL'
 export const CLOSE_SUBMIT_MODAL = 'CLOSE_SUBMIT_MODAL'
+
+export const ORDER_BY = 'ORDER_BY'
 
 export const SEND_COMMENT = 'SEND_COMMENT'
 export const EDIT_COMMENT = 'EDIT_COMMENT'
 export const DELETE_COMMENT = 'DELETE_COMMENT'
 export const VOTE_COMMENT = 'VOTE_COMMENT'
 
-export function initializeApp (posts, comments) {
+export function initializePosts (posts) {
 	return {
-		type: INITIALIZE_CONTENT,
+		type: INITIALIZE_POSTS,
 		posts,
+	}
+}
+
+export function orderBy( compareFunction ) {
+	return {
+		type: ORDER_BY,
+		compareFunction,
+	}
+}
+
+export function initializeComments (comments) {
+	return {
+		type: INITIALIZE_COMMENTS,
 		comments,
 	}
 }

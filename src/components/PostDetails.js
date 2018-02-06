@@ -8,7 +8,7 @@ import Comment from './Comment'
 import * as ReadableAPI from '../ReadableAPI'
 import serializeForm from 'form-serialize'
 import PropTypes from 'prop-types'
-import { editPost, deletePost, votePost, deleteComment } from '../actions'
+import { updatePost, removePost, voteOnPost, deleteComment } from '../actions'
 let moment = require('moment');
 
 class PostDetails extends Component {
@@ -20,15 +20,9 @@ class PostDetails extends Component {
 	handlePostEdit = (e) => {
 		e.preventDefault()
 		const inputValues = serializeForm(e.target, { hash: true })
-		console.log(`>>> Original post author: ${this.props.post.author}`)
 		let post = Object.assign({}, this.props.post, inputValues)
-		console.log(`>>> Editted post author: ${post.author}`)
 		this.props.updatePost(post)
 		this.toggleEditting()
-		ReadableAPI.updatePost(post)
-			.catch((reason) => {
-				console.log(`>>> Post not updated due to: ${reason}`)
-			})
 	}
 
 	deletePost = (id) => {
@@ -36,28 +30,16 @@ class PostDetails extends Component {
 		for (let comment of this.props.post.comments) {
 			this.props.deleteComment(comment.id)
 		}
-		ReadableAPI.deletePost(id)
-			.catch((reason) => {
-				console.log(`>>> Post not deleted due to: ${reason}`)
-			})
 	}
 
 	upVotePost = (id) => {
 		const option = "upVote"
 		this.props.votePost({ id, option })
-		ReadableAPI.votePost(id, option)
-			.catch((reason) => {
-					console.log(`>>> Vote not registered: ${reason}`)
-				})
 	}
 
 	downVotePost = (id) => {
 		const option = "downVote"
 		this.props.votePost({ id, option })
-		ReadableAPI.votePost(id, option)
-			.catch((reason) => {
-					console.log(`>>> Vote not registered: ${reason}`)
-				})
 	}
 
 	isEditting() {
@@ -244,9 +226,9 @@ function mapStateToProps({ post }) {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		updatePost: (data) => dispatch(editPost(data)),
-		deletePost: (data) => dispatch(deletePost(data)),
-		votePost: (data) => dispatch(votePost(data)),
+		updatePost: (data) => dispatch(updatePost(data)),
+		deletePost: (data) => dispatch(removePost(data)),
+		votePost: (data) => dispatch(voteOnPost(data)),
 		deleteComment: (data) => dispatch(deleteComment(data)),
 	}
 }

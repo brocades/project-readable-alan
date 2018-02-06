@@ -8,7 +8,7 @@ import Comment from './Comment'
 import * as ReadableAPI from '../ReadableAPI'
 import serializeForm from 'form-serialize'
 import { connect } from 'react-redux'
-import { sendPost, editPost, deletePost, votePost, deleteComment } from '../actions'
+import { updatePost, removePost, voteOnPost, deleteComment } from '../actions'
 const uuidv1 = require('uuid/v1');
 
 class Post extends Component {
@@ -17,46 +17,12 @@ class Post extends Component {
 		editting: false,
 	}
 
-	handlePostUpload = (e) => {
-		e.preventDefault()
-		const defaultValues = {
-			id: uuidv1(),
-			timestamp: Date.now(),
-			commentCount: 0,
-			voteScore: 1,
-			deleted: false,
-		}
-		const inputValues = serializeForm(e.target, { hash: true })
-		const post = {
-			...defaultValues,
-			...inputValues
-		}
-		//TODO dispatch post list update action
-		this.props.uploadPost(post)
-		ReadableAPI.uploadPost(post)
-			.catch((reason) => {
-				console.log(`>>> Post not uploaded due to: ${reason}`)
-			})
-		this.resetInputform()
-	}
-
-	resetInputform = () => {
-		const postUploadForm = document.getElementById("postUploadForm")
-		postUploadForm.reset()
-	}
-
 	handlePostEdit = (e) => {
 		e.preventDefault()
 		const inputValues = serializeForm(e.target, { hash: true })
-		console.log(`>>> Original post author: ${this.props.post.author}`)
 		let post = Object.assign({}, this.props.post, inputValues)
-		console.log(`>>> Editted post author: ${post.author}`)
 		this.props.updatePost(post)
 		this.toggleEditting()
-		ReadableAPI.updatePost(post)
-			.catch((reason) => {
-				console.log(`>>> Post not updated due to: ${reason}`)
-			})
 	}
 
 	deletePost = (id) => {
@@ -64,28 +30,16 @@ class Post extends Component {
 		for (let comment of this.props.post.comments) {
 			this.props.deleteComment(comment.id)
 		}
-		ReadableAPI.deletePost(id)
-			.catch((reason) => {
-				console.log(`>>> Post not deleted due to: ${reason}`)
-			})
 	}
 
 	upVotePost = (id) => {
 		const option = "upVote"
 		this.props.votePost({ id, option })
-		ReadableAPI.votePost(id, option)
-			.catch((reason) => {
-					console.log(`>>> Vote not registered: ${reason}`)
-				})
 	}
 
 	downVotePost = (id) => {
 		const option = "downVote"
 		this.props.votePost({ id, option })
-		ReadableAPI.votePost(id, option)
-			.catch((reason) => {
-					console.log(`>>> Vote not registered: ${reason}`)
-				})
 	}
 
 	isEditting() {
@@ -274,10 +228,9 @@ function mapStateToProps({ post }) {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		uploadPost: (data) => dispatch(sendPost(data)),
-		updatePost: (data) => dispatch(editPost(data)),
-		deletePost: (data) => dispatch(deletePost(data)),
-		votePost: (data) => dispatch(votePost(data)),
+		updatePost: (data) => dispatch(updatePost(data)),
+		deletePost: (data) => dispatch(removePost(data)),
+		votePost: (data) => dispatch(voteOnPost(data)),
 		deleteComment: (data) => dispatch(deleteComment(data)),
 	}
 }

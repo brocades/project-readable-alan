@@ -9,7 +9,7 @@ import PostSubmit from './PostSubmit'
 import * as ReadableAPI from '../ReadableAPI'
 import { connect } from 'react-redux'
 import Modal from 'react-modal'
-import { openSubmitModal, closeSubmitModal, initializePosts, initializeComments, orderBy } from '../actions'
+import { openSubmitModal, closeSubmitModal, initializeAppPosts, initializeAppComments, orderBy } from '../actions'
 
 class App extends Component {
 
@@ -25,8 +25,8 @@ class App extends Component {
   }
 
   initializeApp() {
-    this.getAllPosts()
-    this.getAllComments()
+    this.props.initializeAppPosts()
+    this.props.initializeAppComments()
     this.controlSelectedColor("all")
   }
 
@@ -69,7 +69,7 @@ class App extends Component {
 
   getAllPosts = () => {
     ReadableAPI.getAllPosts().then((posts) => {
-      this.props.initializePosts(posts)
+      this.props.initializeAppPosts(posts)
     })
   }
 
@@ -203,8 +203,8 @@ function mapDispatchToProps(dispatch) {
   return {
     openSubmitModal: () => dispatch(openSubmitModal()),
     closeSubmitModal: () => dispatch(closeSubmitModal()),
-    initializePosts: (data) => dispatch(initializePosts(data)),
-    initializeComments: (data) => dispatch(initializeComments(data)),
+    initializeAppPosts: () => dispatch(initializeAppPosts()),
+    initializeAppComments: () => dispatch(initializeAppComments()),
     orderItems: (data) => dispatch(orderBy(data)),
   }
 }

@@ -5,7 +5,7 @@ import * as ReadableAPI from '../ReadableAPI'
 import { FaClose } from 'react-icons/lib/fa'
 import serializeForm from 'form-serialize'
 import PropTypes from 'prop-types'
-import { sendPost, closeSubmitModal } from '../actions'
+import { uploadPost, closeSubmitModal } from '../actions'
 const uuidv1 = require('uuid/v1');
 
 class PostSubmit extends Component {
@@ -34,10 +34,6 @@ class PostSubmit extends Component {
 			...inputValues
 		}
 		this.props.uploadPost(post)
-		ReadableAPI.uploadPost(post)
-			.catch((reason) => {
-				console.log(`>>> Post not uploaded due to: ${reason}`)
-			})
 		this.props.closeSubmitModal()
 		this.resetInputform()
 	}
@@ -147,7 +143,7 @@ const mapStateToProps = ({ post }) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-	uploadPost: (data) => dispatch(sendPost(data)),
+	uploadPost: (data) => dispatch(uploadPost(data)),
 	closeSubmitModal: () => dispatch(closeSubmitModal()),
 })
 

@@ -5,7 +5,7 @@ import { FaAngleUp, FaAngleDown, FaEdit, FaClose, FaBan } from 'react-icons/lib/
 import '../comment.css'
 import * as ReadableAPI from '../ReadableAPI'
 import serializeForm from 'form-serialize'
-import { sendComment, editComment, deleteComment, voteComment, updateCommentCount } from '../actions'
+import { uploadComment, updateComment, removeComment, voteOnComment } from '../actions'
 import { connect } from 'react-redux'
 const uuidv1 = require('uuid/v1')
 
@@ -38,12 +38,7 @@ class Comment extends Component {
 			...defaultValues,
 			...inputValues,
 		}
-		this.props.updateCommentCount({ id: comment.parentId, option: "increase" })
 		this.props.uploadComment(comment)
-		ReadableAPI.uploadComment(comment)
-			.catch((reason) => {
-					console.log(`>>> Comment not uploaded due to: ${reason}`)
-				})
 		this.resetInputForm()
 	}
 
@@ -58,35 +53,18 @@ class Comment extends Component {
 		let comment = Object.assign({}, this.props.comment, inputValues)
 		this.props.updateComment(comment)
 		this.toggleEditting()
-		ReadableAPI.updateComment(comment)
-			.catch((reason) => {
-				console.log(`>>> Comment not updated due to: ${reason}`)
-			})
 	}
 
-	deleteComment = (id) => {
-		this.props.updateCommentCount({ id: this.props.parentId, option: "decrease" })
-		this.props.deleteComment(id)
-		ReadableAPI.deleteComment(id)
-			.catch((reason) => {
-				console.log(`>>> Comment not deleted due to: ${reason}`)
-			})
+	deleteComment = (comment) => {
+		this.props.deleteComment(comment)
 	}
 
 	upVoteComment = (id) => {
 		this.props.voteComment({ id, option: "upVote" })
-		ReadableAPI.voteComment(id, "upVote")
-			.catch((reason) => {
-					console.log(`>>> Vote not registered: ${reason}`)
-				})
 	}
 
 	downVoteComment = (id) => {
 		this.props.voteComment({ id, option: "downVote" })
-		ReadableAPI.voteComment(id, "downVote")
-			.catch((reason) => {
-					console.log(`>>> Vote not registered: ${reason}`)
-				})
 	}
 
 	getCommentProps() {
@@ -128,7 +106,7 @@ class Comment extends Component {
 													<FaEdit/>
 												</div>
 
-												<div className="delete-button action-button" onClick={() => this.deleteComment(id)}>
+												<div className="delete-button action-button" onClick={() => this.deleteComment(this.props.comment)}>
 													<FaClose/>
 												</div>
 											</section>
@@ -216,11 +194,10 @@ Comment.propTypes = {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		uploadComment: (data) => dispatch(sendComment(data)),
-		updateComment: (data) => dispatch(editComment(data)),
-		deleteComment: (data) => dispatch(deleteComment(data)),
-		voteComment: (data) => dispatch(voteComment(data)),
-		updateCommentCount: (data) => dispatch(updateCommentCount(data)),
+		uploadComment: (data) => dispatch(uploadComment(data)),
+		updateComment: (data) => dispatch(updateComment(data)),
+		deleteComment: (data) => dispatch(removeComment(data)),
+		voteComment: (data) => dispatch(voteOnComment(data)),
 	}
 }
 

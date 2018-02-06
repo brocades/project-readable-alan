@@ -1,3 +1,5 @@
+import * as ReadableAPI from '../ReadableAPI'
+
 export const SEND_POST = 'SEND_POST'
 export const EDIT_POST = 'EDIT_POST'
 export const DELETE_POST = 'DELETE_POST'
@@ -22,6 +24,12 @@ export function initializePosts (posts) {
 	}
 }
 
+export const initializeAppPosts = () => dispatch => (
+	ReadableAPI
+		.getAllPosts()
+		.then(posts => dispatch(initializePosts(posts)))
+)
+
 export function orderBy( compareFunction ) {
 	return {
 		type: ORDER_BY,
@@ -36,12 +44,24 @@ export function initializeComments (comments) {
 	}
 }
 
+export const initializeAppComments = () => dispatch => (
+	ReadableAPI
+		.getAllComments()
+		.then(comments => dispatch(initializeComments(comments)))
+)
+
 export function sendPost (post) {
 	return {
 		type: SEND_POST,
 		post,
 	}
 }
+
+export const uploadPost = (post) => dispatch => (
+	ReadableAPI
+		.uploadPost(post)
+		.then(post => dispatch(sendPost(post)))
+)
 
 export function editPost ({ id, title, author, body, category }) {
 	return {
@@ -54,12 +74,24 @@ export function editPost ({ id, title, author, body, category }) {
 	}
 }
 
+export const updatePost = (post) =>  dispatch => (
+	ReadableAPI
+		.updatePost(post)
+		.then(() => dispatch(editPost(post)))
+)
+
 export function deletePost ( id ) {
 	return {
 		type: DELETE_POST,
 		id,
 	}
 }
+
+export const removePost = (id) => dispatch => (
+	ReadableAPI
+		.deletePost(id)
+		.then(() => dispatch(deletePost(id)))
+)
 
 export function votePost ({ id, option }) {
 	return {
@@ -68,6 +100,12 @@ export function votePost ({ id, option }) {
 		option,
 	}
 }
+
+export const voteOnPost = ({ id, option }) => dispatch => (
+	ReadableAPI
+		.votePost( id, option )
+		.then(() => dispatch(votePost({ id, option })))
+)
 
 export function openSubmitModal () {
 	return {
@@ -98,6 +136,15 @@ export function sendComment (comment) {
 	}
 }
 
+export const uploadComment = (comment) => dispatch => (
+	ReadableAPI
+		.uploadComment(comment)
+		.then(() => {
+			dispatch(sendComment(comment))
+			dispatch(updateCommentCount({ id: comment.parentId, option: "increase"}))
+		})
+)
+
 export function editComment ({ id, author, body }) {
 	return {
 		type: EDIT_COMMENT,
@@ -107,12 +154,27 @@ export function editComment ({ id, author, body }) {
 	}
 }
 
+export const updateComment = (comment) => dispatch => (
+	ReadableAPI
+		.updateComment(comment)
+		.then(() => dispatch(editComment(comment)))
+)
+
 export function deleteComment (id) {
 	return {
 		type: DELETE_COMMENT,
 		id,
 	}
 }
+
+export const removeComment = (comment) =>  dispatch => (
+	ReadableAPI
+		.deleteComment(comment.id)
+		.then(() => {
+				dispatch(deleteComment(comment.id))
+				dispatch(updateCommentCount({ id: comment.parentId, option: "decrease" }))
+			})
+)
 
 export function voteComment ({ id, option }) {
 	return {
@@ -121,3 +183,9 @@ export function voteComment ({ id, option }) {
 		option,
 	}
 }
+
+export const voteOnComment = ({ id, option }) => dispatch => (
+	ReadableAPI
+		.voteComment(id, option)
+		.then(() => dispatch(voteComment({ id, option })))
+)

@@ -3,6 +3,7 @@ import { combineReducers } from 'redux'
 import {
 	INITIALIZE_POSTS,
 	INITIALIZE_COMMENTS,
+	INITIALIZE_CATEGORIES,
 	SEND_POST,
 	EDIT_POST,
 	DELETE_POST,
@@ -19,24 +20,7 @@ import {
 
 const initialPostsState = {
 	posts: {},
-	categories: [
-    {
-      name: 'all',
-      path: 'all'
-    },
-    {
-      name: 'react',
-      path: 'react'
-    },
-    {
-      name: 'redux',
-      path: 'redux'
-    },
-    {
-      name: 'udacity',
-      path: 'udacity'
-    }
-  ],
+	categories: [],
   submitModal: false,
 }
 
@@ -59,6 +43,12 @@ function post (state = initialPostsState, action) {
 				posts: {
 					...allposts,
 				}
+			}
+		case INITIALIZE_CATEGORIES:
+			const { categories } = action
+			return {
+				...state,
+				categories: categories,
 			}
 		case ORDER_BY:
 			const { compareFunction } = action

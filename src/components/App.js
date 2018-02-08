@@ -9,17 +9,28 @@ import PostSubmit from './PostSubmit'
 import * as ReadableAPI from '../ReadableAPI'
 import { connect } from 'react-redux'
 import Modal from 'react-modal'
-import { openSubmitModal, closeSubmitModal, initializeAppPosts, initializeAppComments, orderBy } from '../actions'
+import { openSubmitModal, closeSubmitModal, initializeAppPosts, initializeAppComments, initializeAppCategories, orderBy } from '../actions'
 
 class App extends Component {
 
-  controlSelectedColor = (selectedCategory) => {
+  controlSelectedCategory = (selectedCategory) => {
     const categoryItems = document.getElementsByClassName("category-item")
 
     for (let item of categoryItems) {
-        item.classList.remove("category-item-selected")
+      item.classList.remove("category-item-selected")
       if (selectedCategory === item.id) {
         item.classList.add("category-item-selected")
+      }
+    }
+  }
+
+  controlSelectedAction = (selectedAction) => {
+    const actionItems = document.getElementsByClassName("action-button")
+
+    for (let action of actionItems) {
+      action.classList.remove("action-button-selected")
+      if (selectedAction === action.id) {
+        action.classList.add("action-button-selected")
       }
     }
   }
@@ -27,7 +38,10 @@ class App extends Component {
   initializeApp() {
     this.props.initializeAppPosts()
     this.props.initializeAppComments()
-    this.controlSelectedColor("all")
+    this.props.initializeAppCategories()
+    this.controlSelectedCategory("all")
+    this.controlSelectedAction("votescore")
+    this.props.orderItems(this.sortByVoteScore)
   }
 
   sortByTimestamp = (itemA, itemB) => {
@@ -52,7 +66,11 @@ class App extends Component {
 
 
   selectCategory = (categoryName) => {
-    this.controlSelectedColor(categoryName)
+    this.controlSelectedCategory(categoryName)
+  }
+
+  selectAction = (actionId) => {
+    this.controlSelectedAction(actionId)
   }
 
   getCategoryPosts = (categoryName) => {
@@ -84,10 +102,21 @@ class App extends Component {
 
     })
   }
+
   getCategories = () => {
-    ReadableAPI.getCategories().then((categories) => {
-      this.setState({ categories })
-    })
+    let categories = [
+      {
+        path: "loading",
+        name: "loading"
+      },
+      {
+        path: "loading",
+        name: "loading"
+      }
+    ]
+    if (this.props.categories.length > 0)
+      categories = this.props.categories
+    return categories
   }
 
   getPostDetails = (id) => {
@@ -97,13 +126,10 @@ class App extends Component {
 
   componentDidMount() {
     this.initializeApp()
-    //this.getCategoryPosts(this.state.category)
-    //this.getPost(this.state.post)
-    //this.getAllPosts()
-    //this.getPostComments(this.state.post)
   }
 
   render() {
+    let categories = this.getCategories()
     return (
       <div className="App">
         <Route exact path="/" render={() => (
@@ -119,7 +145,7 @@ class App extends Component {
             <section className="categories-wrapper">
               <h2 className="category-title">Categories</h2>
                 <section className="category-types">
-                  {this.props.categories.map((category) => (
+                  {categories.map((category) => (
                       <Link to={`/${category.name}`}>
                         <button
                           className="category-item"
@@ -138,7 +164,7 @@ class App extends Component {
               <section className="app-post-header">
                 <h2 className="posts-title">Discussion</h2>
               </section>
-              {this.props.categories.map((category) => (
+              {categories.map((category) => (
                 <Route key={category.path} exact path={`/${category.path}`} render={() => (
                   <CategoryPosts category={category.name}/>
                   )}/>
@@ -155,16 +181,32 @@ class App extends Component {
           <section className="actions-section">
             <section className="actions-wrapper">
               <h2> Actions </h2>
-              <button onClick={this.props.openSubmitModal}>
+              <button
+                className="action-button"
+                onClick={this.props.openSubmitModal}>
               Add
               </button>
 
-              <button onClick={() => this.props.orderItems(this.sortByTimestamp)}>
-                Sort by timestamp
+              <h2> Order by </h2>
+
+              <button
+                id="timestamp"
+                className="action-button"
+                onClick={() => {
+                  this.props.orderItems(this.sortByTimestamp)
+                  this.selectAction("timestamp")
+                }}>
+              Timestamp
               </button>
 
-              <button onClick={() => this.props.orderItems(this.sortByVoteScore)}>
-                Sort by voteScore
+              <button
+                id="votescore"
+                className="action-button"
+                onClick={() => {
+                  this.props.orderItems(this.sortByVoteScore)
+                  this.selectAction("votescore")
+                }}>
+              VoteScore
               </button>
             </section>
           </section>
@@ -205,6 +247,7 @@ function mapDispatchToProps(dispatch) {
     closeSubmitModal: () => dispatch(closeSubmitModal()),
     initializeAppPosts: () => dispatch(initializeAppPosts()),
     initializeAppComments: () => dispatch(initializeAppComments()),
+    initializeAppCategories: () => dispatch(initializeAppCategories()),
     orderItems: (data) => dispatch(orderBy(data)),
   }
 }

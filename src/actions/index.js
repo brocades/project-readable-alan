@@ -7,6 +7,7 @@ export const VOTE_POST = 'VOTE_POST'
 export const UPDATE_COMMENT_COUNT = 'UPDATE_COMMENT_COUNT'
 export const INITIALIZE_POSTS = 'INITIALIZE_POSTS'
 export const INITIALIZE_COMMENTS = 'INITIALIZE_COMMENTS'
+export const INITIALIZE_CATEGORIES = 'INITIALIZE_CATEGORIES'
 export const OPEN_SUBMIT_MODAL = 'OPEN_SUBMIT_MODAL'
 export const CLOSE_SUBMIT_MODAL = 'CLOSE_SUBMIT_MODAL'
 
@@ -48,6 +49,19 @@ export const initializeAppComments = () => dispatch => (
 	ReadableAPI
 		.getAllComments()
 		.then(comments => dispatch(initializeComments(comments)))
+)
+
+export function initializeCategories (categories) {
+	return {
+		type: INITIALIZE_CATEGORIES,
+		categories,
+	}
+}
+
+export const initializeAppCategories = () => dispatch => (
+	ReadableAPI
+		.getCategories()
+		.then(categories => dispatch(initializeCategories(categories)))
 )
 
 export function sendPost (post) {

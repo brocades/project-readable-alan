@@ -91,16 +91,52 @@ h2 {
 }
 
 .category-types button:active {
-  background-color: lightgrey;
+  background-color: deepskyblue;
   color: white;
 }
 
 /* Categories section end */
 
+/* Actions section start */
+
 .actions-wrapper {
   float: left;
   height: 100%;
+  margin-left: 15px;
 }
+
+.action-button {
+  border: 0;
+  background-color: inherit;
+  display: block;
+  margin: 0;
+  margin-bottom: 10px;
+  height: 35px;
+  width: 100%;
+  text-transform: capitalize;
+  cursor: pointer;
+  font-size: 130%;
+}
+
+.action-button:focus {
+  outline: 0;
+}
+
+.action-button-selected {
+  background-color: lightgrey;
+  color: white;
+}
+
+.action-button:hover {
+  background-color: lightgrey;
+}
+
+.action-button:active {
+  background-color: deepskyblue;
+  color: white;
+}
+
+/* Actions section end */
 
 .posts-section {
   display: inline-block;

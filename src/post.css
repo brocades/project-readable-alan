@@ -44,17 +44,17 @@ h3 {
 	display: inline-block;
 }
 
-.action-button {
+.post-action-button {
 	display: inline-block;
 	text-align: center;
 	cursor: pointer;
 }
 
-.action-button:hover {
+.post-action-button:hover {
 	color: deepskyblue;
 }
 
-.action-button:active {
+.post-action-button:active {
 	color: lightgrey;
 }
 

@@ -8,7 +8,7 @@ import Comment from './Comment'
 import * as ReadableAPI from '../ReadableAPI'
 import serializeForm from 'form-serialize'
 import PropTypes from 'prop-types'
-import { updatePost, removePost, voteOnPost, deleteComment } from '../actions'
+import { updatePost, removePost, voteOnPost, removeComment } from '../actions'
 let moment = require('moment');
 
 class PostDetails extends Component {
@@ -98,9 +98,9 @@ class PostDetails extends Component {
 						<Then>
 							<section className="postdetails-wrapper">
 								<section className="postdetails-vote-score-section">
-									<FaAngleUp className="action-button" onClick={() => this.upVotePost(id)}/>
+									<FaAngleUp className="postdetails-action-button" onClick={() => this.upVotePost(id)}/>
 										<p className="postdetails-vote-score">{voteScore}</p>
-									<FaAngleDown className="action-button" onClick={() => this.downVotePost(id)}/>
+									<FaAngleDown className="postdetails-action-button" onClick={() => this.downVotePost(id)}/>
 								</section>
 
 								<section className="postdetails-section">
@@ -114,12 +114,12 @@ class PostDetails extends Component {
 										</section>
 
 										<section className="postdetails-title-buttons">
-											<div className="edit-button action-button" onClick={() => this.toggleEditting()}>
+											<div className="edit-button postdetails-action-button" onClick={() => this.toggleEditting()}>
 												<FaEdit/>
 											</div>
 
 											<Link onClick={() => this.deletePost(id)} to="/">
-												<div className="delete-button action-button">
+												<div className="delete-button postdetails-action-button">
 													<FaClose/>
 												</div>
 											</Link>
@@ -184,7 +184,7 @@ class PostDetails extends Component {
 											</section>
 
 											<section className="postdetails-title-buttons">
-												<div className="cancel-button action-button" onClick={() => this.toggleEditting()}>
+												<div className="cancel-button postdetails-action-button" onClick={() => this.toggleEditting()}>
 													<FaBan/>
 												</div>
 											</section>
@@ -229,7 +229,7 @@ function mapDispatchToProps(dispatch) {
 		updatePost: (data) => dispatch(updatePost(data)),
 		deletePost: (data) => dispatch(removePost(data)),
 		votePost: (data) => dispatch(voteOnPost(data)),
-		deleteComment: (data) => dispatch(deleteComment(data)),
+		deleteComment: (data) => dispatch(removeComment(data)),
 	}
 }
 

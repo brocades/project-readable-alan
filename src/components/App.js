@@ -9,7 +9,7 @@ import PostSubmit from './PostSubmit'
 import * as ReadableAPI from '../ReadableAPI'
 import { connect } from 'react-redux'
 import Modal from 'react-modal'
-import { openSubmitModal, closeSubmitModal, initializeAppPosts, initializeAppComments, orderBy } from '../actions'
+import { openSubmitModal, closeSubmitModal, initializeAppPosts, initializeAppComments, initializeAppCategories, orderBy } from '../actions'
 
 class App extends Component {
 
@@ -38,6 +38,7 @@ class App extends Component {
   initializeApp() {
     this.props.initializeAppPosts()
     this.props.initializeAppComments()
+    this.props.initializeAppCategories()
     this.controlSelectedCategory("all")
     this.controlSelectedAction("votescore")
     this.props.orderItems(this.sortByVoteScore)
@@ -101,10 +102,21 @@ class App extends Component {
 
     })
   }
+
   getCategories = () => {
-    ReadableAPI.getCategories().then((categories) => {
-      this.setState({ categories })
-    })
+    let categories = [
+      {
+        path: "loading",
+        name: "loading"
+      },
+      {
+        path: "loading",
+        name: "loading"
+      }
+    ]
+    if (this.props.categories.length > 0)
+      categories = this.props.categories
+    return categories
   }
 
   getPostDetails = (id) => {
@@ -117,6 +129,7 @@ class App extends Component {
   }
 
   render() {
+    let categories = this.getCategories()
     return (
       <div className="App">
         <Route exact path="/" render={() => (
@@ -132,7 +145,7 @@ class App extends Component {
             <section className="categories-wrapper">
               <h2 className="category-title">Categories</h2>
                 <section className="category-types">
-                  {this.props.categories.map((category) => (
+                  {categories.map((category) => (
                       <Link to={`/${category.name}`}>
                         <button
                           className="category-item"
@@ -151,7 +164,7 @@ class App extends Component {
               <section className="app-post-header">
                 <h2 className="posts-title">Discussion</h2>
               </section>
-              {this.props.categories.map((category) => (
+              {categories.map((category) => (
                 <Route key={category.path} exact path={`/${category.path}`} render={() => (
                   <CategoryPosts category={category.name}/>
                   )}/>
@@ -234,6 +247,7 @@ function mapDispatchToProps(dispatch) {
     closeSubmitModal: () => dispatch(closeSubmitModal()),
     initializeAppPosts: () => dispatch(initializeAppPosts()),
     initializeAppComments: () => dispatch(initializeAppComments()),
+    initializeAppCategories: () => dispatch(initializeAppCategories()),
     orderItems: (data) => dispatch(orderBy(data)),
   }
 }

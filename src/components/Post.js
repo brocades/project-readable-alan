@@ -17,7 +17,7 @@ class Post extends Component {
 		editting: false,
 	}
 
-	handlePostEdit = (e) => {
+	handlePostUpdate = (e) => {
 		e.preventDefault()
 		const inputValues = serializeForm(e.target, { hash: true })
 		let post = Object.assign({}, this.props.post, inputValues)
@@ -141,7 +141,7 @@ class Post extends Component {
 						</section>
 					</Then>
 					<Else>
-						<form className="post-form" onSubmit={this.handlePostEdit}>
+						<form className="post-form" onSubmit={this.handlePostUpdate}>
 							<section className="post-wrapper">
 								<section className="post-edit-section">
 									<section className="post-header">

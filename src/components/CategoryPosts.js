@@ -4,32 +4,30 @@ import { connect } from 'react-redux'
 import Post from './Post'
 import '../App.css';
 
-class CategoryPosts extends Component {
-	render() {
-		let posts = this.props.posts
-			.filter(post => post.category === this.props.category)
-			.filter(post => !post.deleted)
-		if (this.props.category === "all")
-			posts = this.props.posts.filter(post => !post.deleted)
-		return (
-				<If condition={posts.length > 0}>
-	        <Then>
-			      <section className="posts-content">
-			  			{posts
-			          .map((post) => (
-			            <Post
-			              type="display"
-			              key={post.id}
-			              post={post}/>
-			          ))}
-			      </section>
-          </Then>
-	        <Else>
-	           <p> This category has no posts </p>
-	        </Else>
-	      </If>
-		)
-	}
+function CategoryPosts(props) {
+	let posts = props.posts
+		.filter(post => post.category === props.category)
+		.filter(post => !post.deleted)
+	if (props.category === "all")
+		posts = props.posts.filter(post => !post.deleted)
+	return (
+			<If condition={posts.length > 0}>
+        <Then>
+		      <section className="posts-content">
+		  			{posts
+		          .map((post) => (
+		            <Post
+		              type="display"
+		              key={post.id}
+		              post={post}/>
+		          ))}
+		      </section>
+        </Then>
+        <Else>
+           <p> This category has no posts </p>
+        </Else>
+      </If>
+	)
 }
 
 function mapStateToProps({ post, comment }) {

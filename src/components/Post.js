@@ -85,9 +85,9 @@ class Post extends Component {
 					<Then>
 						<section className="post-wrapper">
 							<section className="post-vote-score-section">
-								<FaAngleUp className="action-button" onClick={() => this.upVotePost(id)}/>
+								<FaAngleUp className="post-action-button" onClick={() => this.upVotePost(id)}/>
 									<p className="post-vote-score">{voteScore}</p>
-								<FaAngleDown className="action-button" onClick={() => this.downVotePost(id)}/>
+								<FaAngleDown className="post-action-button" onClick={() => this.downVotePost(id)}/>
 							</section>
 							<section className="post-section">
 								<section className="post-title">
@@ -103,11 +103,11 @@ class Post extends Component {
 									</section>
 
 									<section className="post-title-buttons">
-										<div className="edit-button action-button" onClick={() => this.toggleEditting()}>
+										<div className="edit-button post-action-button" onClick={() => this.toggleEditting()}>
 											<FaEdit/>
 										</div>
 										<Link onClick={() => this.deletePost(id)} to="/">
-											<div className="delete-button action-button">
+											<div className="delete-button post-action-button">
 												<FaClose/>
 											</div>
 										</Link>
@@ -173,7 +173,7 @@ class Post extends Component {
 										</section>
 
 										<section className="post-title-buttons">
-											<div className="cancel-button action-button" onClick={() => this.toggleEditting()}>
+											<div className="cancel-button post-action-button" onClick={() => this.toggleEditting()}>
 												<FaBan/>
 											</div>
 										</section>

@@ -48,17 +48,17 @@
 	color: lightgrey;
 }
 
-.action-button {
+.comment-action-button {
 	display: inline-block;
 	text-align: center;
 	cursor: pointer;
 }
 
-.action-button:hover {
+.comment-action-button:hover {
 	color: deepskyblue;
 }
 
-.action-button:active {
+.comment-action-button:active {
 	color: lightgrey;
 }
 

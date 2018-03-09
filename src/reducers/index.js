@@ -21,6 +21,15 @@ import {
 const initialPostsState = {
 	posts: {},
 	categories: [],
+	orderBy: function timestamp(itemA, itemB) {
+                    const valueB = itemB.timestamp
+                    const valueA = itemA.timestamp
+                    if (valueB < valueA)
+                      return 1
+                    if (valueB > valueA)
+                      return -1
+                    return 0
+                  },
   submitModal: false,
 }
 
@@ -52,19 +61,9 @@ function post (state = initialPostsState, action) {
 			}
 		case ORDER_BY:
 			const { compareFunction } = action
-			let postsList = Object.keys(state.posts).map(key => state.posts[key])
-			postsList.sort(compareFunction)
-			const sortedPosts = postsList.reduce((postsObject, singlePost) => {
-				return {
-					...postsObject,
-					[singlePost.id]: singlePost,
-				}
-			}, {})
 			return {
 				...state,
-				posts: {
-					...sortedPosts,
-				}
+				orderBy: compareFunction,
 			}
 		case SEND_POST:
 			const { post } = action

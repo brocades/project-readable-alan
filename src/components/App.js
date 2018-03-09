@@ -24,6 +24,26 @@ class App extends Component {
     }
   }
 
+  timestamp = (itemA, itemB) => {
+    const valueB = itemB.timestamp
+    const valueA = itemA.timestamp
+    if (valueB < valueA)
+      return 1
+    if (valueB > valueA)
+      return -1
+    return 0
+  }
+
+  voteScore = (itemA, itemB) => {
+    const valueB = itemB.voteScore
+    const valueA = itemA.voteScore
+    if (valueB > valueA)
+      return 1
+    if (valueB < valueA)
+      return -1
+    return 0
+  }
+
   controlSelectedAction = (selectedAction) => {
     const actionItems = document.getElementsByClassName("action-button")
 
@@ -40,30 +60,8 @@ class App extends Component {
     this.props.initializeAppComments()
     this.props.initializeAppCategories()
     this.controlSelectedCategory("all")
-    this.controlSelectedAction("votescore")
-    this.props.orderItems(this.sortByVoteScore)
+    this.controlSelectedAction("timestamp")
   }
-
-  sortByTimestamp = (itemA, itemB) => {
-    const valueB = itemB.timestamp
-    const valueA = itemA.timestamp
-    if (valueB > valueA)
-      return 1
-    if (valueB < valueA)
-      return -1
-    return 0
-  }
-
-  sortByVoteScore = (itemA, itemB) => {
-    const valueB = itemB.voteScore
-    const valueA = itemA.voteScore
-    if (valueB > valueA)
-      return 1
-    if (valueB < valueA)
-      return -1
-    return 0
-  }
-
 
   selectCategory = (categoryName) => {
     this.controlSelectedCategory(categoryName)
@@ -71,36 +69,6 @@ class App extends Component {
 
   selectAction = (actionId) => {
     this.controlSelectedAction(actionId)
-  }
-
-  getCategoryPosts = (categoryName) => {
-    if (categoryName !== "all") {
-      ReadableAPI.getCategoryPosts(categoryName).then((posts) => {
-        this.setState({ posts })
-      })
-    } else {
-      ReadableAPI.getAllPosts().then((posts) => {
-        this.setState({ posts })
-      })
-    }
-  }
-
-  getAllPosts = () => {
-    ReadableAPI.getAllPosts().then((posts) => {
-      this.props.initializeAppPosts(posts)
-    })
-  }
-
-  getAllComments = () => {
-    ReadableAPI.getAllComments().then((comments) => {
-      this.props.initializeComments(comments)
-    })
-  }
-
-  getPostComments = (post) => {
-    ReadableAPI.getPostComments(post).then((comments) => {
-
-    })
   }
 
   getCategories = () => {
@@ -193,7 +161,7 @@ class App extends Component {
                 id="timestamp"
                 className="action-button"
                 onClick={() => {
-                  this.props.orderItems(this.sortByTimestamp)
+                  this.props.orderBy(this.timestamp)
                   this.selectAction("timestamp")
                 }}>
               Timestamp
@@ -203,7 +171,7 @@ class App extends Component {
                 id="votescore"
                 className="action-button"
                 onClick={() => {
-                  this.props.orderItems(this.sortByVoteScore)
+                  this.props.orderBy(this.voteScore)
                   this.selectAction("votescore")
                 }}>
               VoteScore
@@ -241,15 +209,13 @@ function mapStateToProps({ post, comment }) {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    openSubmitModal: () => dispatch(openSubmitModal()),
-    closeSubmitModal: () => dispatch(closeSubmitModal()),
-    initializeAppPosts: () => dispatch(initializeAppPosts()),
-    initializeAppComments: () => dispatch(initializeAppComments()),
-    initializeAppCategories: () => dispatch(initializeAppCategories()),
-    orderItems: (data) => dispatch(orderBy(data)),
-  }
+const mapDispatchToProps = {
+  openSubmitModal,
+  closeSubmitModal,
+  initializeAppPosts,
+  initializeAppComments,
+  initializeAppCategories,
+  orderBy,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

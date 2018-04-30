@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { If, Then, Else } from 'react-if'
 import { connect } from 'react-redux'
 import Post from './Post'

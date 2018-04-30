@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import { Route, Link, Redirect } from 'react-router-dom'
-import { If, Then, Else } from 'react-if'
+import { If, Then } from 'react-if'
 import '../App.css';
-import Post from './Post'
 import CategoryPosts from './CategoryPosts'
 import PostDetails from './PostDetails'
 import PostSubmit from './PostSubmit'
-import * as ReadableAPI from '../ReadableAPI'
 import { connect } from 'react-redux'
-import Modal from 'react-modal'
 import { openSubmitModal, closeSubmitModal, initializeAppPosts, initializeAppComments, initializeAppCategories, orderBy } from '../actions'
 
 class App extends Component {
@@ -113,8 +110,8 @@ class App extends Component {
             <section className="categories-wrapper">
               <h2 className="category-title">Categories</h2>
                 <section className="category-types">
-                  {categories.map((category) => (
-                      <Link to={`/${category.name}`}>
+                  {categories.map((category, key) => (
+                      <Link key={key} to={`/${category.name}`}>
                         <button
                           className="category-item"
                           id={category.name}

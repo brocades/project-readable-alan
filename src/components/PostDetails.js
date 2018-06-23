@@ -90,11 +90,10 @@ class PostDetails extends Component {
 		const { id, voteScore, title, author, body, category, commentCount, comments } = this.getPostProps()
 		const categories = this.getValidCategories()
 		return (
-			<section className="posts-section">
-				<section className="app-postdetails-header">
-	      	<h2 className="postdetails-title">{title}</h2>
-	      </section>
-
+		<section>
+			<section className="app-postdetails-header">
+				<h2 className="postdetails-title">{title}</h2>
+			</section>
 				<section id={id} className="post">
 					<If condition={this.isEditting() === false}>
 						<Then>

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Route, Link, Redirect } from 'react-router-dom'
+import { Route, Link, Switch } from 'react-router-dom'
 import { If, Then } from 'react-if'
 import '../App.css';
 import CategoryPosts from './CategoryPosts'
 import PostDetails from './PostDetails'
 import PostSubmit from './PostSubmit'
+import NoMatch from './NoMatch'
 import { connect } from 'react-redux'
 import { openSubmitModal, closeSubmitModal, initializeAppPosts, initializeAppComments, initializeAppCategories, orderBy } from '../actions'
 
@@ -97,9 +98,6 @@ class App extends Component {
     let categories = this.getCategories()
     return (
       <div className="App">
-        <Route exact path="/" render={() => (
-          <Redirect to="/all"/>
-        )}/>
 
         <header>
           <h1 className="app-title">Readable App</h1>
@@ -111,7 +109,7 @@ class App extends Component {
               <h2 className="category-title">Categories</h2>
                 <section className="category-types">
                   {categories.map((category, key) => (
-                      <Link key={key} to={`/${category.name}`}>
+                      <Link key={key} to={`/${category.name !== 'all' ? category.name : ''}`}>
                         <button
                           className="category-item"
                           id={category.name}
@@ -124,24 +122,28 @@ class App extends Component {
                 </section>
             </section>
           </section>
-          <Route exact path="/:category" render={() => (
-            <section className="posts-section">
-              <section className="app-post-header">
-                <h2 className="posts-title">Discussion</h2>
-              </section>
-              {categories.map((category) => (
-                <Route key={category.path} exact path={`/${category.path}`} render={() => (
-                  <CategoryPosts category={category.name}/>
-                  )}/>
-                ))}
-            </section>
-          )}/>
 
-          <Route exact path="/:category/:id" render={({ match }) => (
-            <PostDetails
-              key={match.params.id}
-              post={this.getPostDetails(match.params.id)}/>
-          )}/>
+            
+          <section className="posts-section">
+
+            <section className="app-post-header">
+              <h2 className="posts-title">Discussion</h2>
+            </section>
+
+            <Switch>
+              <Route key="category-post" exact path="/:category/:id" render={({ match }) => (
+                <PostDetails
+                key={match.params.id}
+                post={this.getPostDetails(match.params.id)}/>
+              )}/>
+              <Route key="all" exact path="/" render={() => <CategoryPosts category="all"/>}/>
+              <Route key="react" exact path="/react" render={() => <CategoryPosts category="react"/>}/>
+              <Route key="redux" exact path="/redux" render={() => <CategoryPosts category="redux"/>}/>
+              <Route key="udacity" exact path="/udacity" render={() => <CategoryPosts category="udacity"/>}/>
+              <Route component={NoMatch} />
+            </Switch>
+          </section>
+
 
           <section className="actions-section">
             <section className="actions-wrapper">

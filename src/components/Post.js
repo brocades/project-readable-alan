@@ -5,11 +5,9 @@ import PropTypes from 'prop-types'
 import { FaAngleUp, FaAngleDown, FaEdit, FaClose, FaBan } from 'react-icons/lib/fa'
 import '../post.css'
 import Comment from './Comment'
-import * as ReadableAPI from '../ReadableAPI'
 import serializeForm from 'form-serialize'
 import { connect } from 'react-redux'
 import { updatePost, removePost, voteOnPost, deleteComment } from '../actions'
-const uuidv1 = require('uuid/v1');
 
 class Post extends Component {
 
@@ -78,7 +76,7 @@ class Post extends Component {
 	render() {
 		const { id, voteScore, title, author, body, category, commentCount, comments } = this.getPostProps()
 		const categories = this.getValidCategories()
-		const type = this.props.type
+
 		return (
 			<section id={id} className="post">
 				<If condition={this.isEditting() === false}>

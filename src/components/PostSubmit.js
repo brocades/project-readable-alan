@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import '../submitpost.css'
-import * as ReadableAPI from '../ReadableAPI'
 import { FaClose } from 'react-icons/lib/fa'
 import serializeForm from 'form-serialize'
 import PropTypes from 'prop-types'

@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
-import { Route, Link, Redirect } from 'react-router-dom'
-import { If, Then, Else } from 'react-if'
+import { Route, Link, Switch } from 'react-router-dom'
+import { If, Then } from 'react-if'
 import '../App.css';
-import Post from './Post'
 import CategoryPosts from './CategoryPosts'
 import PostDetails from './PostDetails'
 import PostSubmit from './PostSubmit'
-import * as ReadableAPI from '../ReadableAPI'
+import NoMatch from './NoMatch'
 import { connect } from 'react-redux'
-import Modal from 'react-modal'
 import { openSubmitModal, closeSubmitModal, initializeAppPosts, initializeAppComments, initializeAppCategories, orderBy } from '../actions'
 
 class App extends Component {
@@ -22,6 +20,26 @@ class App extends Component {
         item.classList.add("category-item-selected")
       }
     }
+  }
+
+  timestamp = (itemA, itemB) => {
+    const valueB = itemB.timestamp
+    const valueA = itemA.timestamp
+    if (valueB < valueA)
+      return 1
+    if (valueB > valueA)
+      return -1
+    return 0
+  }
+
+  voteScore = (itemA, itemB) => {
+    const valueB = itemB.voteScore
+    const valueA = itemA.voteScore
+    if (valueB > valueA)
+      return 1
+    if (valueB < valueA)
+      return -1
+    return 0
   }
 
   controlSelectedAction = (selectedAction) => {
@@ -40,30 +58,8 @@ class App extends Component {
     this.props.initializeAppComments()
     this.props.initializeAppCategories()
     this.controlSelectedCategory("all")
-    this.controlSelectedAction("votescore")
-    this.props.orderItems(this.sortByVoteScore)
+    this.controlSelectedAction("timestamp")
   }
-
-  sortByTimestamp = (itemA, itemB) => {
-    const valueB = itemB.timestamp
-    const valueA = itemA.timestamp
-    if (valueB > valueA)
-      return 1
-    if (valueB < valueA)
-      return -1
-    return 0
-  }
-
-  sortByVoteScore = (itemA, itemB) => {
-    const valueB = itemB.voteScore
-    const valueA = itemA.voteScore
-    if (valueB > valueA)
-      return 1
-    if (valueB < valueA)
-      return -1
-    return 0
-  }
-
 
   selectCategory = (categoryName) => {
     this.controlSelectedCategory(categoryName)
@@ -71,36 +67,6 @@ class App extends Component {
 
   selectAction = (actionId) => {
     this.controlSelectedAction(actionId)
-  }
-
-  getCategoryPosts = (categoryName) => {
-    if (categoryName !== "all") {
-      ReadableAPI.getCategoryPosts(categoryName).then((posts) => {
-        this.setState({ posts })
-      })
-    } else {
-      ReadableAPI.getAllPosts().then((posts) => {
-        this.setState({ posts })
-      })
-    }
-  }
-
-  getAllPosts = () => {
-    ReadableAPI.getAllPosts().then((posts) => {
-      this.props.initializeAppPosts(posts)
-    })
-  }
-
-  getAllComments = () => {
-    ReadableAPI.getAllComments().then((comments) => {
-      this.props.initializeComments(comments)
-    })
-  }
-
-  getPostComments = (post) => {
-    ReadableAPI.getPostComments(post).then((comments) => {
-
-    })
   }
 
   getCategories = () => {
@@ -132,9 +98,6 @@ class App extends Component {
     let categories = this.getCategories()
     return (
       <div className="App">
-        <Route exact path="/" render={() => (
-          <Redirect to="/all"/>
-        )}/>
 
         <header>
           <h1 className="app-title">Readable App</h1>
@@ -145,8 +108,8 @@ class App extends Component {
             <section className="categories-wrapper">
               <h2 className="category-title">Categories</h2>
                 <section className="category-types">
-                  {categories.map((category) => (
-                      <Link to={`/${category.name}`}>
+                  {categories.map((category, key) => (
+                      <Link key={key} to={`/${category.name !== 'all' ? category.name : ''}`}>
                         <button
                           className="category-item"
                           id={category.name}
@@ -159,24 +122,28 @@ class App extends Component {
                 </section>
             </section>
           </section>
-          <Route exact path="/:category" render={() => (
-            <section className="posts-section">
-              <section className="app-post-header">
-                <h2 className="posts-title">Discussion</h2>
-              </section>
-              {categories.map((category) => (
-                <Route key={category.path} exact path={`/${category.path}`} render={() => (
-                  <CategoryPosts category={category.name}/>
-                  )}/>
-                ))}
-            </section>
-          )}/>
 
-          <Route exact path="/:category/:id" render={({ match }) => (
-            <PostDetails
-              key={match.params.id}
-              post={this.getPostDetails(match.params.id)}/>
-          )}/>
+            
+          <section className="posts-section">
+
+            <section className="app-post-header">
+              <h2 className="posts-title">Discussion</h2>
+            </section>
+
+            <Switch>
+              <Route key="category-post" exact path="/:category/:id" render={({ match }) => (
+                <PostDetails
+                key={match.params.id}
+                post={this.getPostDetails(match.params.id)}/>
+              )}/>
+              <Route key="all" exact path="/" render={() => <CategoryPosts category="all"/>}/>
+              <Route key="react" exact path="/react" render={() => <CategoryPosts category="react"/>}/>
+              <Route key="redux" exact path="/redux" render={() => <CategoryPosts category="redux"/>}/>
+              <Route key="udacity" exact path="/udacity" render={() => <CategoryPosts category="udacity"/>}/>
+              <Route component={NoMatch} />
+            </Switch>
+          </section>
+
 
           <section className="actions-section">
             <section className="actions-wrapper">
@@ -193,7 +160,7 @@ class App extends Component {
                 id="timestamp"
                 className="action-button"
                 onClick={() => {
-                  this.props.orderItems(this.sortByTimestamp)
+                  this.props.orderBy(this.timestamp)
                   this.selectAction("timestamp")
                 }}>
               Timestamp
@@ -203,7 +170,7 @@ class App extends Component {
                 id="votescore"
                 className="action-button"
                 onClick={() => {
-                  this.props.orderItems(this.sortByVoteScore)
+                  this.props.orderBy(this.voteScore)
                   this.selectAction("votescore")
                 }}>
               VoteScore
@@ -241,15 +208,13 @@ function mapStateToProps({ post, comment }) {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    openSubmitModal: () => dispatch(openSubmitModal()),
-    closeSubmitModal: () => dispatch(closeSubmitModal()),
-    initializeAppPosts: () => dispatch(initializeAppPosts()),
-    initializeAppComments: () => dispatch(initializeAppComments()),
-    initializeAppCategories: () => dispatch(initializeAppCategories()),
-    orderItems: (data) => dispatch(orderBy(data)),
-  }
+const mapDispatchToProps = {
+  openSubmitModal,
+  closeSubmitModal,
+  initializeAppPosts,
+  initializeAppComments,
+  initializeAppCategories,
+  orderBy,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

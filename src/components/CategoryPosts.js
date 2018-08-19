@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { If, Then, Else } from 'react-if'
 import { connect } from 'react-redux'
 import Post from './Post'
@@ -30,17 +30,22 @@ function CategoryPosts(props) {
 	)
 }
 
+
+
 function mapStateToProps({ post, comment }) {
   const allComments = Object.keys(comment.comments).map(key => comment.comments[key])
-
-  return {
-    posts: Object.values(post.posts).reduce((postsArray, singlePost) => {
+	let allPosts = Object.values(post.posts).reduce((postsArray, singlePost) => {
       postsArray.push({
         ...singlePost,
         comments: allComments.filter(singleComment => singleComment.parentId === singlePost.id)
       })
       return postsArray
     }, [])
+
+	allPosts.sort(post.orderBy)
+	console.log(post.orderBy)
+  return {
+    posts: allPosts,
   }
 }
 

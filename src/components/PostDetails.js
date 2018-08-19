@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom'
 import { FaAngleUp, FaAngleDown, FaEdit, FaClose, FaBan } from 'react-icons/lib/fa'
 import '../postdetails.css'
 import Comment from './Comment'
-import * as ReadableAPI from '../ReadableAPI'
 import serializeForm from 'form-serialize'
 import PropTypes from 'prop-types'
 import { updatePost, removePost, voteOnPost, removeComment } from '../actions'
@@ -57,6 +56,9 @@ class PostDetails extends Component {
 	}
 
 	getReadableDate() {
+		const { post } = this.props
+		if (!post)
+			return `Loading...`
 		const previousMoment = moment(this.props.post.timestamp)
 		const currentMoment = moment()
 		const seconds = currentMoment.diff(previousMoment, 'seconds')
@@ -65,7 +67,7 @@ class PostDetails extends Component {
 			minutes: Math.round(seconds/60),
 			hours: Math.round(seconds/3600),
 		}
-		return `${dateDifference.minutes} minutes ago`
+		return `Posted ${dateDifference.minutes} minutes ago`
 	}
 
 
@@ -88,11 +90,10 @@ class PostDetails extends Component {
 		const { id, voteScore, title, author, body, category, commentCount, comments } = this.getPostProps()
 		const categories = this.getValidCategories()
 		return (
-			<section className="posts-section">
-				<section className="app-postdetails-header">
-	      	<h2 className="postdetails-title">{title}</h2>
-	      </section>
-
+		<section>
+			<section className="app-postdetails-header">
+				<h2 className="postdetails-title">{title}</h2>
+			</section>
 				<section id={id} className="post">
 					<If condition={this.isEditting() === false}>
 						<Then>
@@ -110,7 +111,7 @@ class PostDetails extends Component {
 										</section>
 
 										<section className="postdetails-timeposted">
-											<h4>Posted {this.getReadableDate()} </h4>
+											<h4>{this.getReadableDate()} </h4>
 										</section>
 
 										<section className="postdetails-title-buttons">
